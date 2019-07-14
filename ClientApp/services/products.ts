@@ -11,8 +11,6 @@ export interface Product {
   readonly commentary: string;
 }
 
-export type ProductList = Product[];
-
 export interface CreateProduct {
   readonly name: string;
   readonly proteins: number;
@@ -39,7 +37,7 @@ const baseURL = process.browser ? config.api.browserBaseURL : config.api.baseURL
 const listURL = `${baseURL}/api/products`;
 
 export class ProductService {
-  public async list(): Promise<ProductList> {
+  public async list(): Promise<Product[]> {
     const response = await fetch(listURL, {
       headers: {
         'Accept': 'application/json',
@@ -51,7 +49,7 @@ export class ProductService {
       throw new ProductServiceError(response);
     }
 
-    return await response.json() as ProductList;
+    return await response.json() as Product[];
   }
 
   public async get(id: string): Promise<Product> {
