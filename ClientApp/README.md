@@ -1,5 +1,9 @@
 ## Installation
 
+Copy `config.example.ts` to the `config.ts`.
+
+Install dependencies:
+
 ```sh
 npm install
 ```
