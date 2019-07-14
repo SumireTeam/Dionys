@@ -6,5 +6,6 @@ namespace Dionys.Models
     {
         public DionysContext(DbContextOptions options) : base(options) { }
         public DbSet<Product> Products { get; set; }
+        public DbSet<EatenProduct> EatenProducts { get; set; }
     }
 }
