@@ -1,17 +1,16 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
+/*import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { withRouter } from 'next/router';
-import NextLink from 'next/link';
 import MuiLink from '@material-ui/core/Link';
 
 const NextComposed = React.forwardRef((props: any, ref: any) => {
   const { href, prefetch, as, ...other } = props;
 
   return (
-    <NextLink href={href} prefetch={prefetch} as={as}>
-      <a ref={ref} {...other} />
-    </NextLink>
+    <a ref={ref} {...other} />
   );
 }) as any;
 
@@ -58,4 +57,15 @@ Link.propTypes = {
 
 const RouterLink = withRouter(Link);
 
-export default React.forwardRef((props, ref) => <RouterLink {...props} innerRef={ref} />) as any;
+export default React.forwardRef((props, ref) => <RouterLink {...props} innerRef={ref} />) as any;*/
+
+const Link = (props) => {
+  return <RouterLink to={props.to}>{props.children}</RouterLink>;
+};
+
+Link.propTypes = {
+  to: PropTypes.string.isRequired,
+  children: PropTypes.node,
+};
+
+export default Link;
