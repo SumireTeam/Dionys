@@ -4,7 +4,7 @@ import { Layout, Link } from '../components';
 const Home = () => {
   return (
     <Layout title="Home">
-      <Link href="/products">Products</Link>
+      <Link to="/products">Products</Link>
     </Layout>
   );
 };
