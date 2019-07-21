@@ -20,7 +20,7 @@ export interface CreateProduct {
   readonly commentary: string;
 }
 
-export class ProductServiceError extends Error {
+export class ApiServiceError extends Error {
   public readonly response: Response;
 
   public constructor(
@@ -33,10 +33,20 @@ export class ProductServiceError extends Error {
   }
 }
 
+export class ProductServiceError extends ApiServiceError { }
+
 const baseURL = config.api.baseURL;
 const listURL = `${baseURL}/api/products`;
 
-export class ProductService {
+export interface CrudService<T> {
+  list(): Promise<T[]>;
+  get(id: string): Promise<T>;
+  create(data: object): Promise<T>;
+  update(model: T): Promise<T>;
+  delete(id: string): Promise<T>;
+}
+
+export class ProductService implements CrudService<Product> {
   public async list(): Promise<Product[]> {
     const response = await fetch(listURL, {
       headers: {

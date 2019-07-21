@@ -5,9 +5,10 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Button,
 } from '@material-ui/core';
-import { Link } from '../../components';
 import { Product } from '../../services';
+import LinkAdapter from '../link-adapter';
 
 interface Props {
   products: Product[];
@@ -37,7 +38,18 @@ const List = ({ products }: Props) => {
             <TableCell align="right">{product.energy}</TableCell>
 
             <TableCell>
-              <Link to={`/products/${product.id}`}>View</Link>
+              <Button className="button"
+                variant="contained"
+                size="small"
+                color="primary"
+                component={LinkAdapter}
+                to={`/products/${product.id}`}>View</Button>
+
+              <Button className="button"
+                variant="contained"
+                size="small"
+                component={LinkAdapter}
+                to={`/products/${product.id}/edit`}>Edit</Button>
             </TableCell>
           </TableRow>
         ))}
