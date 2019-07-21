@@ -63,7 +63,7 @@ namespace Dionys
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseReactDevelopmentServer(npmScript: "dev");
+                    spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
         }

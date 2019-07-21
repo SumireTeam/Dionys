@@ -37,7 +37,7 @@ const List = ({ products }: Props) => {
             <TableCell align="right">{product.energy}</TableCell>
 
             <TableCell>
-              <Link href="/products/[id]" as={`/products/${product.id}`}>View</Link>
+              <Link to={`/products/${product.id}`}>View</Link>
             </TableCell>
           </TableRow>
         ))}

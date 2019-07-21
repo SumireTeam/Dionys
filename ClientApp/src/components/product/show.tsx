@@ -12,6 +12,10 @@ interface Props {
 }
 
 const Show = ({ product }: Props) => {
+  if (!product) {
+    return null;
+  }
+
   return (
     <Table>
       <TableBody>

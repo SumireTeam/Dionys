@@ -33,7 +33,7 @@ export class ProductServiceError extends Error {
   }
 }
 
-const baseURL = process.browser ? config.api.browserBaseURL : config.api.baseURL;
+const baseURL = config.api.baseURL;
 const listURL = `${baseURL}/api/products`;
 
 export class ProductService {
