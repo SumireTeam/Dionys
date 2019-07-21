@@ -1,6 +1,6 @@
 import React from 'react';
-import { Breadcrumbs, CircularProgress } from '@material-ui/core';
-import { Layout, Link, ProductList } from '../../components';
+import { Breadcrumbs, CircularProgress, Button } from '@material-ui/core';
+import { Layout, Link, ProductList, LinkAdapter } from '../../components';
 import { ProductService, Product } from '../../services';
 
 interface State {
@@ -30,6 +30,14 @@ class List extends React.Component<{}, State> {
         <Breadcrumbs className="breadcrumbs" aria-label="Breadcrumb">
           <Link to="/">Home</Link>
         </Breadcrumbs>
+
+        <div className="actions">
+          <Button className="button"
+            variant="contained"
+            color="primary"
+            component={LinkAdapter}
+            to={'/products/create'}>Create</Button>
+        </div>
 
         {this.state.loading
           ? <CircularProgress className="progress" />

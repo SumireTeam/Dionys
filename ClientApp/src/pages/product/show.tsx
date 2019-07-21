@@ -29,8 +29,10 @@ class Show extends React.Component<Props, State> {
   };
 
   public render() {
+    const product = this.state.product;
+
     return (
-      <Layout title={this.state.product ? this.state.product.name : ''}>
+      <Layout title={product && product.name ? product.name : 'Product'}>
         <Breadcrumbs className="breadcrumbs" aria-label="Breadcrumb">
           <Link to="/">Home</Link>
           <Link to="/products">Product list</Link>
@@ -45,7 +47,7 @@ class Show extends React.Component<Props, State> {
 
         {this.state.loading
           ? <CircularProgress className="progress" />
-          : <ProductShow product={this.state.product} />}
+          : <ProductShow product={product} />}
       </Layout>
     );
   };

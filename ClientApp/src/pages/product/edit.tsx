@@ -47,8 +47,10 @@ class Edit extends React.Component<Props, State> {
   }
 
   public render() {
+    const product = this.state.product;
+
     return (
-      <Layout title={this.state.product ? this.state.product.name : ''}>
+      <Layout title={product && product.name ? product.name : 'Edit product'}>
         <Breadcrumbs className="breadcrumbs" aria-label="Breadcrumb">
           <Link to="/">Home</Link>
           <Link to="/products">Product list</Link>
@@ -64,7 +66,7 @@ class Edit extends React.Component<Props, State> {
 
         {this.state.loading
           ? <CircularProgress className="progress" />
-          : <ProductEdit product={this.state.product}
+          : <ProductEdit product={product}
             onModelChange={this.onModelChange}
             onSubmit={this.onSubmit} />}
       </Layout>

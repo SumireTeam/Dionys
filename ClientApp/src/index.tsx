@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import { Home, ProductList, ProductShow, ProductEdit } from './pages';
+import { Home, ProductList, ProductShow, ProductEdit, ProductCreate } from './pages';
 
 const rootElement = document.getElementById('root');
 ReactDOM.render(
@@ -16,6 +16,9 @@ ReactDOM.render(
 
       <Route exact path="/products"
         component={ProductList} />
+
+      <Route exact path="/products/create"
+        render={props => <ProductCreate history={props.history} />} />
 
       <Route exact path="/products/:id"
         render={props => <ProductShow {...props.match.params} />} />
