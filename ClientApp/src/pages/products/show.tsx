@@ -1,5 +1,5 @@
 import React from 'react';
-import { Breadcrumbs } from '@material-ui/core';
+import { Breadcrumbs, CircularProgress } from '@material-ui/core';
 import { Layout, Link, ProductShow } from '../../components';
 import { ProductService, Product } from '../../services';
 
@@ -8,6 +8,7 @@ interface Props {
 }
 
 interface State {
+  readonly loading: boolean;
   readonly product: Product;
 }
 
@@ -16,6 +17,7 @@ class ProductPage extends React.Component<Props, State> {
     super(props);
 
     this.state = {
+      loading: true,
       product: null,
     };
   };
@@ -23,7 +25,7 @@ class ProductPage extends React.Component<Props, State> {
   public async componentDidMount() {
     const service = new ProductService();
     const product = await service.get(this.props.id);
-    this.setState({ product });
+    this.setState({ loading: false, product });
   };
 
   public render() {
@@ -34,7 +36,9 @@ class ProductPage extends React.Component<Props, State> {
           <Link to="/products">Product list</Link>
         </Breadcrumbs>
 
-        <ProductShow product={this.state.product} />
+        {this.state.loading
+          ? <CircularProgress className="progress" />
+          : <ProductShow product={this.state.product} />}
       </Layout>
     );
   };

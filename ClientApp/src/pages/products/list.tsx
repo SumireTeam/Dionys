@@ -1,9 +1,10 @@
 import React from 'react';
-import { Breadcrumbs } from '@material-ui/core';
+import { Breadcrumbs, CircularProgress } from '@material-ui/core';
 import { Layout, Link, ProductList } from '../../components';
 import { ProductService, Product } from '../../services';
 
 interface State {
+  readonly loading: boolean;
   readonly products: Product[];
 }
 
@@ -12,6 +13,7 @@ class ProductsPage extends React.Component<{}, State> {
     super(props);
 
     this.state = {
+      loading: true,
       products: [],
     };
   }
@@ -19,7 +21,7 @@ class ProductsPage extends React.Component<{}, State> {
   public async componentDidMount() {
     const service = new ProductService();
     const products = await service.list();
-    this.setState({ products });
+    this.setState({ loading: false, products });
   }
 
   public render() {
@@ -29,7 +31,9 @@ class ProductsPage extends React.Component<{}, State> {
           <Link to="/">Home</Link>
         </Breadcrumbs>
 
-        <ProductList products={this.state.products} />
+        {this.state.loading
+          ? <CircularProgress className="progress" />
+          : <ProductList products={this.state.products} />}
       </Layout>
     );
   };
