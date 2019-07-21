@@ -1,6 +1,6 @@
 import React from 'react';
-import { Breadcrumbs, CircularProgress } from '@material-ui/core';
-import { Layout, Link, ProductShow } from '../../components';
+import { Breadcrumbs, CircularProgress, Button } from '@material-ui/core';
+import { Layout, Link, ProductShow, LinkAdapter } from '../../components';
 import { ProductService, Product } from '../../services';
 
 interface Props {
@@ -12,7 +12,7 @@ interface State {
   readonly product: Product;
 }
 
-class ProductPage extends React.Component<Props, State> {
+class Show extends React.Component<Props, State> {
   public constructor(props) {
     super(props);
 
@@ -36,6 +36,13 @@ class ProductPage extends React.Component<Props, State> {
           <Link to="/products">Product list</Link>
         </Breadcrumbs>
 
+        <div className="actions">
+          <Button className="button"
+            variant="contained"
+            component={LinkAdapter}
+            to={`/products/${this.props.id}/edit`}>Edit</Button>
+        </div>
+
         {this.state.loading
           ? <CircularProgress className="progress" />
           : <ProductShow product={this.state.product} />}
@@ -44,4 +51,4 @@ class ProductPage extends React.Component<Props, State> {
   };
 }
 
-export default ProductPage;
+export default Show;

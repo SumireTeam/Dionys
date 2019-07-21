@@ -25,6 +25,11 @@ const Show = ({ product }: Props) => {
         </TableRow>
 
         <TableRow>
+          <TableCell component="th" scope="row">Description</TableCell>
+          <TableCell>{product.commentary}</TableCell>
+        </TableRow>
+
+        <TableRow>
           <TableCell component="th" scope="row">Protein</TableCell>
           <TableCell>{product.proteins}</TableCell>
         </TableRow>

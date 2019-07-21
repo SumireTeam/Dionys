@@ -8,7 +8,7 @@ interface State {
   readonly products: Product[];
 }
 
-class ProductsPage extends React.Component<{}, State> {
+class List extends React.Component<{}, State> {
   public constructor(props) {
     super(props);
 
@@ -39,4 +39,4 @@ class ProductsPage extends React.Component<{}, State> {
   };
 };
 
-export default ProductsPage;
+export default List;
