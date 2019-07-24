@@ -2,26 +2,23 @@ import fetch from 'isomorphic-unfetch';
 import { config } from '../config';
 import { ApiServiceError, CrudService } from './service';
 
-export interface ProductData {
-  readonly name: string;
-  readonly proteins: number;
-  readonly fats: number;
-  readonly carbohydrates: number;
-  readonly energy: number;
-  readonly commentary: string;
+export interface ConsumedData {
+  readonly productId: string;
+  readonly weight: number;
+  readonly time: string;
 }
 
-export type Product = ProductData & {
+export type Consumed = ConsumedData & {
   readonly id: string;
 }
 
-export class ProductServiceError extends ApiServiceError { }
+export class ConsumedServiceError extends ApiServiceError { }
 
 const baseURL = config.api.baseURL;
-const listURL = `${baseURL}/api/products`;
+const listURL = `${baseURL}/api/eatenproducts`;
 
-export class ProductService implements CrudService<Product> {
-  public async list(): Promise<Product[]> {
+export class ConsumedService implements CrudService<Consumed> {
+  public async list(): Promise<Consumed[]> {
     const response = await fetch(listURL, {
       headers: {
         'Accept': 'application/json',
@@ -30,13 +27,13 @@ export class ProductService implements CrudService<Product> {
     });
 
     if (response.status !== 200) {
-      throw new ProductServiceError(response);
+      throw new ConsumedServiceError(response);
     }
 
-    return await response.json() as Product[];
+    return await response.json() as Consumed[];
   }
 
-  public async get(id: string): Promise<Product> {
+  public async get(id: string): Promise<Consumed> {
     const response = await fetch(`${listURL}/${id}`, {
       headers: {
         'Accept': 'application/json',
@@ -45,13 +42,13 @@ export class ProductService implements CrudService<Product> {
     });
 
     if (response.status !== 200) {
-      throw new ProductServiceError(response);
+      throw new ConsumedServiceError(response);
     }
 
-    return await response.json() as Product;
+    return await response.json() as Consumed;
   }
 
-  public async create(data: ProductData): Promise<Product> {
+  public async create(data: ConsumedData): Promise<Consumed> {
     const response = await fetch(listURL, {
       method: 'post',
       headers: {
@@ -63,31 +60,31 @@ export class ProductService implements CrudService<Product> {
     });
 
     if (response.status !== 201) {
-      throw new ProductServiceError(response);
+      throw new ConsumedServiceError(response);
     }
 
-    return await response.json() as Product;
+    return await response.json() as Consumed;
   }
 
-  public async update(product: Product): Promise<Product> {
-    const response = await fetch(`${listURL}/${product.id}`, {
+  public async update(consumed: Consumed): Promise<Consumed> {
+    const response = await fetch(`${listURL}/${consumed.id}`, {
       method: 'put',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(product),
+      body: JSON.stringify(consumed),
       credentials: 'same-origin',
     });
 
     if (response.status !== 204) {
-      throw new ProductServiceError(response);
+      throw new ConsumedServiceError(response);
     }
 
-    return product;
+    return consumed;
   }
 
-  public async delete(id: string): Promise<Product> {
+  public async delete(id: string): Promise<Consumed> {
     const response = await fetch(`${listURL}/${id}`, {
       method: 'delete',
       headers: {
@@ -97,9 +94,9 @@ export class ProductService implements CrudService<Product> {
     });
 
     if (response.status !== 200) {
-      throw new ProductServiceError(response);
+      throw new ConsumedServiceError(response);
     }
 
-    return await response.json() as Product;
+    return await response.json() as Consumed;
   }
 }
