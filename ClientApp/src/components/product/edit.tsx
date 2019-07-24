@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField, Button } from '@material-ui/core';
-import { Product } from '../../services';
+import { Product } from '../../models';
 
 interface Props {
   product: Product;
@@ -45,16 +45,17 @@ class Edit extends React.Component<Props, State> {
         <TextField className="field"
           variant="outlined"
           label="Description"
-          value={this.props.product.commentary}
-          onChange={e => onChange({ ...this.props.product, commentary: e.target.value })}
+          value={this.props.product.description}
+          onChange={e => onChange({ ...this.props.product, description: e.target.value })}
           fullWidth
           multiline />
 
         <TextField className="field"
           variant="outlined"
           label="Protein"
-          value={this.props.product.proteins}
-          onChange={e => numRegExp.test(e.target.value) && onChange({ ...this.props.product, proteins: +e.target.value })}
+          value={this.props.product.protein}
+          onChange={e => numRegExp.test(e.target.value)
+            && onChange({ ...this.props.product, protein: +e.target.value })}
           type="number"
           inputProps={{ min: "0" }}
           fullWidth
@@ -63,8 +64,9 @@ class Edit extends React.Component<Props, State> {
         <TextField className="field"
           variant="outlined"
           label="Fat"
-          value={this.props.product.fats}
-          onChange={e => numRegExp.test(e.target.value) && onChange({ ...this.props.product, fats: +e.target.value })}
+          value={this.props.product.fat}
+          onChange={e => numRegExp.test(e.target.value)
+            && onChange({ ...this.props.product, fat: +e.target.value })}
           type="number"
           inputProps={{ min: "0" }}
           fullWidth
@@ -73,8 +75,9 @@ class Edit extends React.Component<Props, State> {
         <TextField className="field"
           variant="outlined"
           label="Carbs"
-          value={this.props.product.carbohydrates}
-          onChange={e => numRegExp.test(e.target.value) && onChange({ ...this.props.product, carbohydrates: +e.target.value })}
+          value={this.props.product.carbs}
+          onChange={e => numRegExp.test(e.target.value)
+            && onChange({ ...this.props.product, carbs: +e.target.value })}
           type="number"
           inputProps={{ min: "0" }}
           fullWidth
@@ -83,8 +86,9 @@ class Edit extends React.Component<Props, State> {
         <TextField className="field"
           variant="outlined"
           label="Calories"
-          value={this.props.product.energy}
-          onChange={e => numRegExp.test(e.target.value) && onChange({ ...this.props.product, energy: +e.target.value })}
+          value={this.props.product.calories}
+          onChange={e => numRegExp.test(e.target.value)
+            && onChange({ ...this.props.product, calories: +e.target.value })}
           type="number"
           inputProps={{ min: "0" }}
           fullWidth

@@ -2,7 +2,8 @@ import React from 'react';
 import { Breadcrumbs } from '@material-ui/core';
 import { History } from 'history';
 import { Layout, Link, ProductEdit } from '../../components';
-import { ProductService, Product } from '../../services';
+import { ProductService } from '../../services';
+import { Product } from '../../models';
 
 interface Props {
   readonly history: History;
@@ -30,11 +31,11 @@ class Create extends React.Component<Props, State> {
     const product: Product = {
       id: null,
       name: '',
-      proteins: 0,
-      fats: 0,
-      carbohydrates: 0,
-      energy: 0,
-      commentary: '',
+      description: '',
+      protein: 0,
+      fat: 0,
+      carbs: 0,
+      calories: 0,
     };
 
     this.setState({ product });

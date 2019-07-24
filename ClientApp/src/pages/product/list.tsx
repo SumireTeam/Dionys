@@ -1,7 +1,8 @@
 import React from 'react';
 import { Breadcrumbs, CircularProgress, Button } from '@material-ui/core';
 import { Layout, Link, ProductList, LinkAdapter } from '../../components';
-import { ProductService, Product } from '../../services';
+import { ProductService } from '../../services';
+import { Product } from '../../models';
 
 interface State {
   readonly loading: boolean;

@@ -13,14 +13,14 @@ export class ApiServiceError extends Error {
   }
 }
 
-export interface Model {
-  readonly id: string;
+export interface Identity {
+  id: string;
 }
 
-export interface CrudService<TData extends object, TModel extends Model & TData> {
+export interface CrudService<TModel extends Identity> {
   list(): Promise<TModel[]>;
   get(id: string): Promise<TModel>;
-  create(data: TData): Promise<TModel>;
+  create(model: TModel): Promise<TModel>;
   update(model: TModel): Promise<TModel>;
   delete(id: string): Promise<TModel>;
 }
@@ -40,14 +40,19 @@ function request(method: string, endpoint: string, data: object = null) {
   return fetch(url, options);
 }
 
-export abstract class CrudServiceBase<TData extends object, TModel extends Model & TData>
-  implements CrudService<TData, TModel> { // eslint-disable-line @typescript-eslint/indent
+export abstract class CrudServiceBase<TData extends Identity, TModel extends Identity>
+  implements CrudService<TModel> { // eslint-disable-line @typescript-eslint/indent
 
   protected readonly endpoint: string;
 
   protected constructor(endpoint: string) {
     this.endpoint = endpoint;
+    this.mapToModel = this.mapToModel.bind(this);
+    this.mapToData = this.mapToData.bind(this);
   }
+
+  protected abstract mapToModel(data: TData): TModel;
+  protected abstract mapToData(model: TModel): TData;
 
   public async list(): Promise<TModel[]> {
     const response = await request('get', this.endpoint);
@@ -55,7 +60,8 @@ export abstract class CrudServiceBase<TData extends object, TModel extends Model
       throw new ApiServiceError(response);
     }
 
-    return await response.json() as TModel[];
+    const items = await response.json() as TData[];
+    return items.map(this.mapToModel);
   }
 
   public async get(id: string): Promise<TModel> {
@@ -64,20 +70,24 @@ export abstract class CrudServiceBase<TData extends object, TModel extends Model
       throw new ApiServiceError(response);
     }
 
-    return await response.json() as TModel;
+    const item = await response.json() as TData;
+    return this.mapToModel(item);
   }
 
-  public async create(data: TData): Promise<TModel> {
+  public async create(model: TModel): Promise<TModel> {
+    const data = this.mapToData(model);
     const response = await request('post', this.endpoint, data);
     if (response.status !== 201) {
       throw new ApiServiceError(response);
     }
 
-    return await response.json() as TModel;
+    const item = await response.json() as TData;
+    return this.mapToModel(item);
   }
 
   public async update(model: TModel): Promise<TModel> {
-    const response = await request('put', `${this.endpoint}/${model.id}`, model);
+    const data = this.mapToData(model);
+    const response = await request('put', `${this.endpoint}/${model.id}`, data);
     if (response.status !== 204) {
       throw new ApiServiceError(response);
     }
@@ -91,6 +101,7 @@ export abstract class CrudServiceBase<TData extends object, TModel extends Model
       throw new ApiServiceError(response);
     }
 
-    return await response.json() as TModel;
+    const item = await response.json() as TData;
+    return this.mapToModel(item);
   }
 }

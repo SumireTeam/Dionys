@@ -5,7 +5,7 @@ import {
   TableRow,
   TableCell,
 } from '@material-ui/core';
-import { Product } from '../../services';
+import { Product } from '../../models';
 
 interface Props {
   product: Product;
@@ -26,27 +26,27 @@ const Show = ({ product }: Props) => {
 
         <TableRow>
           <TableCell component="th" scope="row">Description</TableCell>
-          <TableCell>{product.commentary}</TableCell>
+          <TableCell>{product.description}</TableCell>
         </TableRow>
 
         <TableRow>
           <TableCell component="th" scope="row">Protein</TableCell>
-          <TableCell>{product.proteins}</TableCell>
+          <TableCell>{product.protein}</TableCell>
         </TableRow>
 
         <TableRow>
           <TableCell component="th" scope="row">Fat</TableCell>
-          <TableCell>{product.fats}</TableCell>
+          <TableCell>{product.fat}</TableCell>
         </TableRow>
 
         <TableRow>
           <TableCell component="th" scope="row">Carbs</TableCell>
-          <TableCell>{product.carbohydrates}</TableCell>
+          <TableCell>{product.carbs}</TableCell>
         </TableRow>
 
         <TableRow>
           <TableCell component="th" scope="row">Calories</TableCell>
-          <TableCell>{product.energy}</TableCell>
+          <TableCell>{product.calories}</TableCell>
         </TableRow>
       </TableBody>
     </Table>

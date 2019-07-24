@@ -2,7 +2,8 @@ import React from 'react';
 import { Breadcrumbs, CircularProgress, Button } from '@material-ui/core';
 import { History } from 'history';
 import { Layout, Link, ProductEdit, LinkAdapter } from '../../components';
-import { ProductService, Product } from '../../services';
+import { ProductService } from '../../services';
+import { Product } from '../../models';
 
 interface Props {
   readonly id: string;

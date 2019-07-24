@@ -7,7 +7,7 @@ import {
   TableCell,
   Button,
 } from '@material-ui/core';
-import { Product } from '../../services';
+import { Product } from '../../models';
 import LinkAdapter from '../link-adapter';
 
 interface Props {
@@ -32,10 +32,10 @@ const List = ({ products }: Props) => {
         {products.map(product => (
           <TableRow key={product.id}>
             <TableCell component="th" scope="row">{product.name}</TableCell>
-            <TableCell align="right">{product.proteins}</TableCell>
-            <TableCell align="right">{product.fats}</TableCell>
-            <TableCell align="right">{product.carbohydrates}</TableCell>
-            <TableCell align="right">{product.energy}</TableCell>
+            <TableCell align="right">{product.protein}</TableCell>
+            <TableCell align="right">{product.fat}</TableCell>
+            <TableCell align="right">{product.carbs}</TableCell>
+            <TableCell align="right">{product.calories}</TableCell>
 
             <TableCell>
               <Button className="button"
