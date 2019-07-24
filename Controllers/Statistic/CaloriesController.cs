@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Dionys.Models;
+using Dionys.Models.ViewModels;
 using Dionys.Models.ViewModels.Statistic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -20,35 +21,38 @@ namespace Dionys.Controllers.Statistic
         }
 
         // GET: api/statistic/calories
-        public EatenProductsTotal GetCaloriesTotal()
+        public ConsumedProductsTotal GetCaloriesTotal([FromQuery] PagingParameterModel paging)
         {
-            var eatenProductsByWeek = _context.EatenProducts.Local;
+            var consumedProductsByWeek = _context.ConsumedProducts.Local;
 
-            return GetCaloriesFrom(eatenProductsByWeek);
+            return GetCaloriesFrom(consumedProductsByWeek);
         }
 
         // GET: api/statistic/calories/2019/1
         [HttpGet("{year}/{weekNumber}")]
-        public EatenProductsTotal GetCalories(int year, int weekNumber)
+        public ConsumedProductsTotal GetCalories(int year, int weekNumber)
         {
-            var eatenProductsByWeek = _context.EatenProducts.Where(x => Equals(GetWeekYear(x.Time), new Tuple<int, int>(year, weekNumber)));
-            return GetCaloriesFrom(eatenProductsByWeek);
+            var consumedProductsByWeek = _context.ConsumedProducts.Where(
+                x => Equals(GetWeekYear(x.Time), new Tuple<int, int>(year, weekNumber))
+                );
+
+            return GetCaloriesFrom(consumedProductsByWeek);
         }
 
         /// <summary>
-        /// Get eaten products report from eatenProducts list
+        /// Get consumed products report from ConsumedProducts list
         /// </summary>
         /// <param name="products">products</param>
         /// <returns>report</returns>
-        private EatenProductsTotal GetCaloriesFrom(IEnumerable<EatenProduct> products)
+        private ConsumedProductsTotal GetCaloriesFrom(IEnumerable<ConsumedProduct> products)
         {
-            IEnumerable<EatenProduct> eatenProducts = products.ToList();
+            IEnumerable<ConsumedProduct> consumedProducts = products.ToList();
 
-            var total = new EatenProductsTotal
+            var total = new ConsumedProductsTotal
             {
-                Products = eatenProducts,
+                Products = consumedProducts,
                 TotalCalories =
-                    Convert.ToInt64(eatenProducts.Select(x => x.Weight * x.Product.Energy / 100).FirstOr(0))
+                    Convert.ToInt64(consumedProducts.Select(x => x.Weight * x.Product.Energy / 100).FirstOr(0))
             };
 
             return total;

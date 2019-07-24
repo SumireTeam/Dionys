@@ -1,10 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Dionys.Models;
+using Dionys.Models.DTO;
 
 namespace Dionys.Controllers
 {
@@ -12,23 +14,30 @@ namespace Dionys.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
+        // DTO to Database Entity mapper
+        private readonly IMapper _mapper;
+
+        // Database Context
         private readonly DionysContext _context;
 
-        public ProductsController(DionysContext context)
+        public ProductsController(DionysContext context, IMapper mapper)
         {
             _context = context;
+            _mapper  = mapper;
         }
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public IQueryable<ProductDTO> GetProducts()
         {
-            return await _context.Products.ToListAsync();
+            var products = from p in _context.Products select _mapper.Map<ProductDTO>(p);
+
+            return products;
         }
 
         // GET: api/Products/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(Guid id)
+        public async Task<ActionResult<ProductDTO>> GetProduct(Guid id)
         {
             var product = await _context.Products.FindAsync(id);
 
@@ -37,19 +46,20 @@ namespace Dionys.Controllers
                 return NotFound();
             }
 
-            return product;
+            var dtoProduct = _mapper.Map<ProductDTO>(product);
+            return dtoProduct;
         }
 
         // PUT: api/Products/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(Guid id, Product product)
+        public async Task<IActionResult> PutProduct(Guid id, ProductDTO productDto)
         {
-            if (id != product.Id)
+            if (id != productDto.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(product).State = EntityState.Modified;
+            _context.Entry(productDto).State = EntityState.Modified;
 
             try
             {
@@ -61,10 +71,8 @@ namespace Dionys.Controllers
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
 
             return NoContent();
@@ -72,17 +80,19 @@ namespace Dionys.Controllers
 
         // POST: api/Products
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        public async Task<ActionResult<ProductDTO>> PostProduct(ProductDTO productDto)
         {
+            Product product = _mapper.Map<Product>(productDto);
+
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+            return CreatedAtAction("GetProduct", new { id = productDto.Id }, productDto);
         }
 
         // DELETE: api/Products/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Product>> DeleteProduct(Guid id)
+        public async Task<ActionResult<ProductDTO>> DeleteProduct(Guid id)
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null)
@@ -93,7 +103,7 @@ namespace Dionys.Controllers
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
 
-            return product;
+            return _mapper.Map<ProductDTO>(product);
         }
 
         private bool ProductExists(Guid id)

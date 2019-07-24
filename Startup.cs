@@ -1,3 +1,4 @@
+using AutoMapper;
 using Dionys.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +34,18 @@ namespace Dionys
                 Configuration.GetConnectionString("DefaultConnection")
                 )
             );
+
+            services.AddTransient<MappingScenario>();
+            var sp = services.BuildServiceProvider();
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                // MappingScenario
+                mc.AddProfile(sp.GetService<MappingScenario>());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

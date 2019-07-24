@@ -1,27 +1,27 @@
-﻿using System;
+using System;
 
 namespace Dionys.Models
 {
     /// <summary>
-    /// Eaten Product Entity
+    /// Consumed Product Entity
     /// </summary>
-    public class EatenProduct
+    public class ConsumedProduct
     {
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Eaten product
+        /// Consumed product
         /// </summary>
         public Product Product { get; set; }
 
         /// <summary>
-        /// Eaten product weight
+        /// Consumed product weight
         /// </summary>
         public float Weight { get; set; }
 
         /// <summary>
-        /// When product was eaten
+        /// When product was consumed
         /// </summary>
-        public DateTime Time { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }
