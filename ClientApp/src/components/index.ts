@@ -1,3 +1,4 @@
+export * from './consumed';
 export * from './product';
 
 export { default as Layout } from './layout';
