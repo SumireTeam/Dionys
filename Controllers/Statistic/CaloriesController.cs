@@ -33,7 +33,7 @@ namespace Dionys.Controllers.Statistic
         public ConsumedProductsTotal GetCalories(int year, int weekNumber)
         {
             var consumedProductsByWeek = _context.ConsumedProducts.Where(
-                x => Equals(GetWeekYear(x.Time), new Tuple<int, int>(year, weekNumber))
+                x => Equals(GetWeekYear(x.Timestamp), new Tuple<int, int>(year, weekNumber))
                 );
 
             return GetCaloriesFrom(consumedProductsByWeek);
@@ -52,7 +52,7 @@ namespace Dionys.Controllers.Statistic
             {
                 Products = consumedProducts,
                 TotalCalories =
-                    Convert.ToInt64(consumedProducts.Select(x => x.Weight * x.Product.Energy / 100).FirstOr(0))
+                    Convert.ToInt64(consumedProducts.Select(x => x.Weight * x.Product.Calories / 100).FirstOr(0))
             };
 
             return total;
