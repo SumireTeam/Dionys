@@ -59,7 +59,9 @@ namespace Dionys.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(productDto).State = EntityState.Modified;
+            var product = _context.Products.Find(productDto.Id);
+
+            _context.Entry(product).State = EntityState.Modified;
 
             try
             {
@@ -87,7 +89,7 @@ namespace Dionys.Controllers
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduct", new { id = productDto.Id }, productDto);
+            return CreatedAtAction("GetProduct", new { id = product.Id }, productDto);
         }
 
         // DELETE: api/Products/5
