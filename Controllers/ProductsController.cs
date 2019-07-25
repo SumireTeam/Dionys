@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -18,9 +17,9 @@ namespace Dionys.Controllers
         private readonly IMapper _mapper;
 
         // Database Context
-        private readonly DionysContext _context;
+        private readonly IDionysContext _context;
 
-        public ProductsController(DionysContext context, IMapper mapper)
+        public ProductsController(IDionysContext context, IMapper mapper)
         {
             _context = context;
             _mapper  = mapper;
@@ -61,7 +60,7 @@ namespace Dionys.Controllers
 
             var product = _context.Products.Find(productDto.Id);
 
-            _context.Entry(product).State = EntityState.Modified;
+            _context.MarkAsModified(product);
 
             try
             {

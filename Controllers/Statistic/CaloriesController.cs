@@ -13,9 +13,9 @@ namespace Dionys.Controllers.Statistic
     [Route("api/statistic/[controller]")]
     public class CaloriesController : ControllerBase
     {
-        private readonly DionysContext _context;
+        private readonly IDionysContext _context;
 
-        public CaloriesController(DionysContext context)
+        public CaloriesController(IDionysContext context)
         {
             _context = context;
         }

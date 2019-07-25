@@ -43,6 +43,8 @@ namespace Dionys
             });
 
             services.AddTransient<MappingScenario>();
+            services.AddTransient<IDionysContext, DionysContext>();
+
             var sp = services.BuildServiceProvider();
 
             var mappingConfig = new MapperConfiguration(mc =>
