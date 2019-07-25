@@ -21,6 +21,12 @@ namespace Dionys.Controllers.Statistic
         }
 
         // GET: api/statistic/calories
+        /// <summary>
+        /// Calories entity list
+        /// </summary>
+        /// <param name="paging"></param>
+        /// <returns></returns>
+        [HttpGet]
         public ConsumedProductsTotal GetCaloriesTotal([FromQuery] PagingParameterModel paging)
         {
             var consumedProductsByWeek = _context.ConsumedProducts.Local;

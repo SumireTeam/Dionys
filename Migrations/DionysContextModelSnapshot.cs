@@ -37,7 +37,7 @@ namespace Dionys.Migrations
                     b.ToTable("ConsumedProducts");
                 });
 
-            modelBuilder.Entity("Dionys.Models.DTO.ProductDTO", b =>
+            modelBuilder.Entity("Dionys.Models.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -56,7 +56,7 @@ namespace Dionys.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductDTO");
+                    b.ToTable("Products");
 
                     b.HasData(
                         new
@@ -99,28 +99,6 @@ namespace Dionys.Migrations
                             Name = "Яшкино. Французский крекер с кунжутом, 185 г",
                             Protein = 8.5f
                         });
-                });
-
-            modelBuilder.Entity("Dionys.Models.Product", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<float>("Calories");
-
-                    b.Property<float>("Carbohydrates");
-
-                    b.Property<string>("Description");
-
-                    b.Property<float>("Fat");
-
-                    b.Property<string>("Name");
-
-                    b.Property<float>("Protein");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Dionys.Models.ConsumedProduct", b =>

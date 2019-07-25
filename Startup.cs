@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
+
 
 namespace Dionys
 {
@@ -34,6 +36,11 @@ namespace Dionys
                 Configuration.GetConnectionString("DefaultConnection")
                 )
             );
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Dionys API", Version = "indev" });
+            });
 
             services.AddTransient<MappingScenario>();
             var sp = services.BuildServiceProvider();
@@ -68,6 +75,12 @@ namespace Dionys
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dionys API indev");
             });
 
             app.UseSpa(spa =>

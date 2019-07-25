@@ -47,7 +47,7 @@ namespace Dionys.Seeds
                 }
             };
 
-            modelBuilder.Entity<ProductDTO>().HasData(products);
+            modelBuilder.Entity<Product>().HasData(products);
         }
     }
 }

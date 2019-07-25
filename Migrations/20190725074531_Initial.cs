@@ -8,23 +8,6 @@ namespace Dionys.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ProductDTO",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Protein = table.Column<float>(nullable: false),
-                    Fat = table.Column<float>(nullable: false),
-                    Carbohydrates = table.Column<float>(nullable: false),
-                    Calories = table.Column<float>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductDTO", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -62,7 +45,7 @@ namespace Dionys.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "ProductDTO",
+                table: "Products",
                 columns: new[] { "Id", "Calories", "Carbohydrates", "Description", "Fat", "Name", "Protein" },
                 values: new object[,]
                 {
@@ -82,9 +65,6 @@ namespace Dionys.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ConsumedProducts");
-
-            migrationBuilder.DropTable(
-                name: "ProductDTO");
 
             migrationBuilder.DropTable(
                 name: "Products");
