@@ -4,11 +4,11 @@ import { Product } from '../models';
 export interface ProductData {
   readonly id: string;
   readonly name: string;
-  readonly proteins: number;
-  readonly fats: number;
+  readonly description: string;
+  readonly protein: number;
+  readonly fat: number;
   readonly carbohydrates: number;
-  readonly energy: number;
-  readonly commentary: string;
+  readonly calories: number;
 }
 
 export class ProductService extends CrudServiceBase<ProductData, Product> {
@@ -20,11 +20,11 @@ export class ProductService extends CrudServiceBase<ProductData, Product> {
     return {
       id: data.id,
       name: data.name,
-      description: data.commentary,
-      protein: +data.proteins,
-      fat: +data.fats,
+      description: data.description,
+      protein: +data.protein,
+      fat: +data.fat,
       carbs: +data.carbohydrates,
-      calories: +data.energy,
+      calories: +data.calories,
     };
   }
 
@@ -32,11 +32,11 @@ export class ProductService extends CrudServiceBase<ProductData, Product> {
     return {
       id: model.id,
       name: model.name,
-      commentary: model.description,
-      proteins: +model.protein,
-      fats: +model.fat,
+      description: model.description,
+      protein: +model.protein,
+      fat: +model.fat,
       carbohydrates: +model.carbs,
-      energy: +model.calories,
+      calories: +model.calories,
     };
   }
 }

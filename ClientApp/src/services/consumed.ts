@@ -3,31 +3,31 @@ import { Consumed } from '../models';
 
 export interface ConsumedData {
   readonly id: string;
-  readonly productId: string;
+  readonly product: string;
   readonly weight: number;
-  readonly time: string;
+  readonly timestamp: string;
 }
 
 export class ConsumedService extends CrudServiceBase<ConsumedData, Consumed> {
   public constructor() {
-    super('eatenproducts');
+    super('consumedproducts');
   }
 
   protected mapToModel(data: ConsumedData): Consumed {
     return {
       id: data.id,
-      productId: data.productId,
+      productId: data.product,
       weight: +data.weight,
-      date: new Date(data.time),
+      date: new Date(data.timestamp),
     };
   }
 
   protected mapToData(model: Consumed): ConsumedData {
     return {
       id: model.id,
-      productId: model.productId,
+      product: model.productId,
       weight: +model.weight,
-      time: model.date.toISOString(),
+      timestamp: model.date.toISOString(),
     };
   }
 }
