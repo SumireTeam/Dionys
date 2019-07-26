@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumbs, CircularProgress, Button } from '@material-ui/core';
 import { Layout, Link, ConsumedList, LinkAdapter } from '../../components';
-import { ConsumedService } from '../../services';
+import { ServiceProvider } from '../../services';
 import { Consumed } from '../../models';
 
 interface State {
@@ -20,7 +20,7 @@ class List extends React.Component<{}, State> {
   }
 
   public async componentDidMount() {
-    const service = new ConsumedService();
+    const service = ServiceProvider.consumedService;
     const consumed = await service.list();
     this.setState({ loading: false, consumed });
   }

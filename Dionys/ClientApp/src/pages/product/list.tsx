@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumbs, CircularProgress, Button } from '@material-ui/core';
 import { Layout, Link, ProductList, LinkAdapter } from '../../components';
-import { ProductService } from '../../services';
+import { ServiceProvider } from '../../services';
 import { Product } from '../../models';
 
 interface State {
@@ -20,7 +20,7 @@ class List extends React.Component<{}, State> {
   }
 
   public async componentDidMount() {
-    const service = new ProductService();
+    const service = ServiceProvider.productService;
     const products = await service.list();
     this.setState({ loading: false, products });
   }

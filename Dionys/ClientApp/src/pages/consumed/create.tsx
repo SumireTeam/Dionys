@@ -2,7 +2,7 @@ import React from 'react';
 import { Breadcrumbs } from '@material-ui/core';
 import { History } from 'history';
 import { Layout, Link, ConsumedEdit } from '../../components';
-import { ConsumedService } from '../../services';
+import { ServiceProvider } from '../../services';
 import { Consumed } from '../../models';
 
 interface Props {
@@ -14,7 +14,7 @@ interface State {
 }
 
 class Create extends React.Component<Props, State> {
-  protected readonly service: ConsumedService = new ConsumedService();
+  protected readonly service = ServiceProvider.consumedService;
 
   public constructor(props) {
     super(props);

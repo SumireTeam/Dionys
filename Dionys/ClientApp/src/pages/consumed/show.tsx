@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumbs, CircularProgress, Button } from '@material-ui/core';
 import { Layout, Link, ConsumedShow, LinkAdapter } from '../../components';
-import { ConsumedService } from '../../services';
+import { ServiceProvider } from '../../services';
 import { Consumed } from '../../models';
 
 interface Props {
@@ -24,7 +24,7 @@ class Show extends React.Component<Props, State> {
   };
 
   public async componentDidMount() {
-    const service = new ConsumedService();
+    const service = ServiceProvider.consumedService;
     const consumed = await service.get(this.props.id);
     this.setState({ loading: false, consumed });
   };

@@ -2,7 +2,7 @@ import React from 'react';
 import { Breadcrumbs, CircularProgress, Button } from '@material-ui/core';
 import { History } from 'history';
 import { Layout, Link, ConsumedEdit, LinkAdapter } from '../../components';
-import { ConsumedService } from '../../services';
+import { ServiceProvider } from '../../services';
 import { Consumed } from '../../models';
 
 interface Props {
@@ -16,7 +16,7 @@ interface State {
 }
 
 class Edit extends React.Component<Props, State> {
-  protected readonly service: ConsumedService = new ConsumedService();
+  protected readonly service = ServiceProvider.consumedService;
 
   public constructor(props) {
     super(props);
