@@ -34,6 +34,17 @@ namespace Dionys.Controllers
             return products;
         }
 
+        // GET: api/Products/name/{name}
+        [HttpGet("search/{name}")]
+        public IQueryable<ProductDTO> GetProductsSearch(string name)
+        {
+            var products = from p in _context.Products
+                where EF.Functions.Like(p.Name, name)
+                select _mapper.Map<ProductDTO>(p);
+
+            return products;
+        }
+
         // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDTO>> GetProduct(Guid id)
