@@ -1,4 +1,3 @@
-using System.IO;
 using System.Text;
 using AutoMapper;
 using Dionys.Models;
@@ -73,6 +72,7 @@ namespace Dionys
             });
 
             services.AddTransient<MappingScenario>();
+            services.AddTransient<NestedMappingScenario>();
             services.AddTransient<IDionysContext, DionysContext>();
 
             var sp = services.BuildServiceProvider();
@@ -83,7 +83,15 @@ namespace Dionys
             });
 
             IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
+
+            var mappingConfigNested = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(sp.GetService<MappingScenario>());
+                mc.AddProfile(new NestedMappingScenario(sp.GetService<IDionysContext>(), mapper));
+            });
+
+            IMapper nestedMapper = mappingConfigNested.CreateMapper();
+            services.AddSingleton(nestedMapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

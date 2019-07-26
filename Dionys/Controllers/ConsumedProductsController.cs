@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -25,7 +26,7 @@ namespace Dionys.Controllers
 
         // GET: api/ConsumedProducts
         [HttpGet]
-        public IQueryable<ConsumedProductResponseDTO> GetConsumedProducts()
+        public IEnumerable<ConsumedProductResponseDTO> GetConsumedProducts()
         {
             var consumedProductDtos = from consumedProduct in _context.ConsumedProducts
                                 select _mapper.Map<ConsumedProductResponseDTO>(consumedProduct);
@@ -86,7 +87,7 @@ namespace Dionys.Controllers
             ConsumedProduct consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductReqestDTO);
 
             // HACK: EF trying to insert new entity Product
-            Product product = _context.Products.Find(consumedProduct.Product.Id);
+            Product product = _context.Products.Find(consumedProductReqestDTO.ProductId);
             consumedProduct.Product = product;
 
             _context.ConsumedProducts.Add(consumedProduct);
