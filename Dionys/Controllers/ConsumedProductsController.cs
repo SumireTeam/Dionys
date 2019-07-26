@@ -93,7 +93,9 @@ namespace Dionys.Controllers
             _context.ConsumedProducts.Add(consumedProduct);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetConsumedProduct", new { id = consumedProduct.Id }, consumedProduct);
+            var consumedProductResponseDTO = _mapper.Map<ConsumedProductResponseDTO>(consumedProduct);
+
+            return CreatedAtAction("GetConsumedProduct", new { id = consumedProductResponseDTO.Id }, consumedProductResponseDTO);
         }
 
         // DELETE: api/ConsumedProducts/5
