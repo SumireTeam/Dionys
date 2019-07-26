@@ -1,8 +1,9 @@
 using System.Threading.Tasks;
-using Dionys.Seeds;
+using Dionys.Infrastructure.Seeds;
+using Dionys.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dionys.Models
+namespace Dionys.Infrastructure.Models
 {
     public class DionysContext : DbContext, IDionysContext
     {

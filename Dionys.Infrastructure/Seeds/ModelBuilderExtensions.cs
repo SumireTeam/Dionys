@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Dionys.Models;
-using Dionys.Models.DTO;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dionys.Seeds
+namespace Dionys.Infrastructure.Seeds
 {
     public static class ModelBuilderExtensions
     {
