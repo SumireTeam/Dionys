@@ -25,17 +25,17 @@ namespace Dionys.Controllers
 
         // GET: api/ConsumedProducts
         [HttpGet]
-        public IQueryable<ConsumedProductDTO> GetConsumedProducts()
+        public IQueryable<ConsumedProductResponseDTO> GetConsumedProducts()
         {
             var consumedProductDtos = from consumedProduct in _context.ConsumedProducts
-                                select _mapper.Map<ConsumedProductDTO>(consumedProduct);
+                                select _mapper.Map<ConsumedProductResponseDTO>(consumedProduct);
 
             return consumedProductDtos;
         }
 
         // GET: api/ConsumedProducts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ConsumedProductDTO>> GetConsumedProduct(Guid id)
+        public async Task<ActionResult<ConsumedProductResponseDTO>> GetConsumedProduct(Guid id)
         {
             var consumedProduct = await _context.ConsumedProducts.FindAsync(id);
 
@@ -44,17 +44,19 @@ namespace Dionys.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<ConsumedProductDTO>(consumedProduct);
+            return _mapper.Map<ConsumedProductResponseDTO>(consumedProduct);
         }
 
         // PUT: api/ConsumedProducts/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutConsumedProduct(Guid id, ConsumedProduct consumedProduct)
+        public async Task<IActionResult> PutConsumedProduct(Guid id, ConsumedProductRequestDTO consumedProductRequestDTO)
         {
-            if (id != consumedProduct.Id)
+            if (id != consumedProductRequestDTO.Id)
             {
                 return BadRequest();
             }
+
+            var consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductRequestDTO);
 
             _context.MarkAsModified(consumedProduct);
 
@@ -79,9 +81,9 @@ namespace Dionys.Controllers
 
         // POST: api/ConsumedProducts
         [HttpPost]
-        public async Task<ActionResult<ConsumedProduct>> PostConsumedProduct(ConsumedProductDTO consumedProductDTO)
+        public async Task<ActionResult<ConsumedProductResponseDTO>> PostConsumedProduct(ConsumedProductRequestDTO consumedProductReqestDTO)
         {
-            ConsumedProduct consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductDTO);
+            ConsumedProduct consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductReqestDTO);
 
             // HACK: EF trying to insert new entity Product
             Product product = _context.Products.Find(consumedProduct.Product.Id);
@@ -95,7 +97,7 @@ namespace Dionys.Controllers
 
         // DELETE: api/ConsumedProducts/5
         [HttpDelete("{id}")]
-        public ActionResult<ConsumedProductDTO> DeleteConsumedProduct(Guid id)
+        public ActionResult<ConsumedProductRequestDTO> DeleteConsumedProduct(Guid id)
         {
             var consumedProduct = _context.ConsumedProducts.Find(id);
             if (consumedProduct == null)
@@ -106,7 +108,7 @@ namespace Dionys.Controllers
             _context.ConsumedProducts.Remove(consumedProduct);
             _context.SaveChanges();
 
-            return _mapper.Map<ConsumedProductDTO>(consumedProduct);
+            return _mapper.Map<ConsumedProductRequestDTO>(consumedProduct);
         }
 
         private bool ConsumedProductExists(Guid id)
