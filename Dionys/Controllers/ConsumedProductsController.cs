@@ -13,11 +13,11 @@ namespace Dionys.Controllers
     [ApiController]
     public class ConsumedProductsController : ControllerBase
     {
-        private readonly DionysContext _context;
+        private readonly IDionysContext _context;
 
         private readonly IMapper _mapper;
 
-        public ConsumedProductsController(DionysContext context, IMapper mapper)
+        public ConsumedProductsController(IDionysContext context, IMapper mapper)
         {
             _context = context;
             _mapper  = mapper;
@@ -56,7 +56,7 @@ namespace Dionys.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(consumedProduct).State = EntityState.Modified;
+            _context.MarkAsModified(consumedProduct);
 
             try
             {

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dionys", "Dionys.csproj", "{99069DF2-414B-4540-A2A4-A6EDE04FB2A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dionys.Tests", "Dionys.Tests\Dionys.Tests.csproj", "{98DCB7C0-A75A-49BD-B505-1DFCAA49FDD7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dionys", "Dionys\Dionys.csproj", "{00066709-DF9A-4A2F-90B2-D2B7B2479119}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{99069DF2-414B-4540-A2A4-A6EDE04FB2A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{99069DF2-414B-4540-A2A4-A6EDE04FB2A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{99069DF2-414B-4540-A2A4-A6EDE04FB2A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{99069DF2-414B-4540-A2A4-A6EDE04FB2A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98DCB7C0-A75A-49BD-B505-1DFCAA49FDD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98DCB7C0-A75A-49BD-B505-1DFCAA49FDD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98DCB7C0-A75A-49BD-B505-1DFCAA49FDD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98DCB7C0-A75A-49BD-B505-1DFCAA49FDD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00066709-DF9A-4A2F-90B2-D2B7B2479119}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00066709-DF9A-4A2F-90B2-D2B7B2479119}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00066709-DF9A-4A2F-90B2-D2B7B2479119}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00066709-DF9A-4A2F-90B2-D2B7B2479119}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

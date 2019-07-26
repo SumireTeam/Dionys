@@ -5,7 +5,7 @@ namespace Dionys.Models
     /// <summary>
     /// Product Entity
     /// </summary>
-    public class Product
+    public class Product : IDbModel
     {
         public Guid   Id            { get; set; }
         public string Name          { get; set; }

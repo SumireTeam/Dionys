@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -18,9 +17,9 @@ namespace Dionys.Controllers
         private readonly IMapper _mapper;
 
         // Database Context
-        private readonly DionysContext _context;
+        private readonly IDionysContext _context;
 
-        public ProductsController(DionysContext context, IMapper mapper)
+        public ProductsController(IDionysContext context, IMapper mapper)
         {
             _context = context;
             _mapper  = mapper;
@@ -59,7 +58,9 @@ namespace Dionys.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(productDto).State = EntityState.Modified;
+            var product = _context.Products.Find(productDto.Id);
+
+            _context.MarkAsModified(product);
 
             try
             {
@@ -87,7 +88,7 @@ namespace Dionys.Controllers
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduct", new { id = productDto.Id }, productDto);
+            return CreatedAtAction("GetProduct", new { id = product.Id }, productDto);
         }
 
         // DELETE: api/Products/5

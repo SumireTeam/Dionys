@@ -5,7 +5,7 @@ namespace Dionys.Models
     /// <summary>
     /// Consumed Product Entity
     /// </summary>
-    public class ConsumedProduct
+    public class ConsumedProduct : IDbModel
     {
         public Guid Id { get; set; }
 
