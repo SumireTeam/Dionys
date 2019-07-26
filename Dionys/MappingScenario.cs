@@ -13,7 +13,8 @@ namespace Dionys
             CreateMap<Product, ProductDTO>();
 
             CreateMap<ConsumedProduct, ConsumedProductResponseDTO>()
-                .ForMember(d => d.Product, opt => opt.MapFrom(p => p.Product));
+                .ForMember(d => d.Product, opt => opt.MapFrom(p => p.Product))
+                .ForMember(d => d.ProductId, opt => opt.MapFrom(p => p.Product.Id));
 
 
             CreateMap<ConsumedProductRequestDTO, ConsumedProduct>()

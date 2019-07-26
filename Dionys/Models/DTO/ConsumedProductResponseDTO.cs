@@ -7,6 +7,11 @@ namespace Dionys.Models.DTO
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Consumed product id
+        /// </summary>
+        public Guid ProductId { get; set; }
+
+        /// <summary>
         /// Consumed product
         /// </summary>
         public ProductDTO Product { get; set; }
