@@ -18,7 +18,7 @@ namespace Dionys
 
             CreateMap<ConsumedProductRequestDTO, ConsumedProduct>()
                 .ForMember(d => d.Product, opt => opt.Ignore())
-                .AfterMap((d, e) => { e.Product = context.Products.Find(d.Product); });
+                .AfterMap((d, e) => { e.Product = context.Products.Find(d.ProductId); });
         }
     }
 }

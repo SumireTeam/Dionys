@@ -7,9 +7,9 @@ namespace Dionys.Models.DTO
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Consumed product
+        /// Consumed product ID
         /// </summary>
-        public Guid Product { get; set; }
+        public Guid ProductId { get; set; }
 
         /// <summary>
         /// Consumed product weight
