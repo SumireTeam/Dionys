@@ -58,8 +58,7 @@ namespace Dionys.Controllers
                 return BadRequest();
             }
 
-            var product = _context.Products.Find(productDto.Id);
-
+            var product = _mapper.Map<Product>(productDto);
             _context.MarkAsModified(product);
 
             try
@@ -85,10 +84,15 @@ namespace Dionys.Controllers
         {
             Product product = _mapper.Map<Product>(productDto);
 
+            do
+            {
+                product.Id = new Guid();
+            } while (_context.Products.Find(product.Id) != null);
+
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduct", new { id = product.Id }, productDto);
+            return CreatedAtAction("GetProduct", new { id = product.Id }, _mapper.Map<ProductDTO>(product));
         }
 
         // DELETE: api/Products/5

@@ -2,7 +2,7 @@ using System;
 
 namespace Dionys.Models.DTO
 {
-    public class ConsumedProductDTO
+    public class ConsumedProductRequestDTO
     {
         public Guid Id { get; set; }
 
