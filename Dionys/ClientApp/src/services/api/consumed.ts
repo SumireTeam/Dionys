@@ -4,7 +4,7 @@ import { ConsumedService } from '../consumed';
 
 export interface ConsumedData {
   readonly id: string;
-  readonly product: string;
+  readonly productId: string;
   readonly weight: number;
   readonly timestamp: string;
 }
@@ -18,7 +18,7 @@ export class ApiConsumedService extends ApiCrudService<ConsumedData, Consumed>
   protected mapToModel(data: ConsumedData): Consumed {
     return {
       id: data.id,
-      productId: data.product,
+      productId: data.productId,
       weight: +data.weight,
       date: new Date(data.timestamp),
     };
@@ -27,7 +27,7 @@ export class ApiConsumedService extends ApiCrudService<ConsumedData, Consumed>
   protected mapToData(model: Consumed): ConsumedData {
     return {
       id: model.id,
-      product: model.productId,
+      productId: model.productId,
       weight: +model.weight,
       timestamp: model.date.toISOString(),
     };
