@@ -1,7 +1,6 @@
 using System.Text;
 using AutoMapper;
 using Dionys.Infrastructure.Models;
-using Dionys.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
