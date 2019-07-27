@@ -12,46 +12,61 @@ import LinkAdapter from '../link-adapter';
 
 interface Props {
   consumed: Consumed[];
+  openDeleteDialog: (item: Consumed) => void;
 }
 
-const List = ({ consumed }: Props) => {
-  return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Product</TableCell>
-          <TableCell align="right">Weight&nbsp;(g)</TableCell>
-          <TableCell>Date</TableCell>
-          <TableCell>Actions</TableCell>
-        </TableRow>
-      </TableHead>
+class List extends React.Component<Props, {}> {
+  public constructor(props) {
+    super(props);
 
-      <TableBody>
-        {consumed.map(consumed => (
-          <TableRow key={consumed.id}>
-            <TableCell component="th" scope="row">{consumed.productId}</TableCell>
-            <TableCell align="right">{consumed.weight}</TableCell>
-            <TableCell>{consumed.date.toISOString()}</TableCell>
+    this.state = {};
+  }
 
-            <TableCell>
-              <Button className="button"
-                variant="contained"
-                size="small"
-                color="primary"
-                component={LinkAdapter}
-                to={`/consumed/${consumed.id}`}>View</Button>
-
-              <Button className="button"
-                variant="contained"
-                size="small"
-                component={LinkAdapter}
-                to={`/consumed/${consumed.id}/edit`}>Edit</Button>
-            </TableCell>
+  public render() {
+    return (
+      <Table className="list">
+        <TableHead>
+          <TableRow>
+            <TableCell>Product</TableCell>
+            <TableCell align="right">Weight&nbsp;(g)</TableCell>
+            <TableCell>Date</TableCell>
+            <TableCell>Actions</TableCell>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-};
+        </TableHead>
+
+        <TableBody>
+          {this.props.consumed.map(consumed => (
+            <TableRow key={consumed.id}>
+              <TableCell component="th" scope="row">{consumed.productId}</TableCell>
+              <TableCell align="right">{consumed.weight}</TableCell>
+              <TableCell>{consumed.date.toISOString()}</TableCell>
+
+              <TableCell className="list-actions">
+                <Button className="button"
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                  component={LinkAdapter}
+                  to={`/consumed/${consumed.id}`}>View</Button>
+
+                <Button className="button"
+                  variant="contained"
+                  size="small"
+                  component={LinkAdapter}
+                  to={`/consumed/${consumed.id}/edit`}>Edit</Button>
+
+                <Button className="button"
+                  variant="contained"
+                  size="small"
+                  color="secondary"
+                  onClick={() => this.props.openDeleteDialog(consumed)}>Delete</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  }
+}
 
 export default List;

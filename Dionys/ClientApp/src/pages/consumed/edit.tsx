@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumbs, CircularProgress, Button } from '@material-ui/core';
 import { History } from 'history';
-import { Layout, Link, ConsumedEdit, LinkAdapter } from '../../components';
+import { Layout, Link, ConsumedEdit, LinkAdapter, DeleteDialog } from '../../components';
 import { ServiceProvider } from '../../services';
 import { Consumed } from '../../models';
 
@@ -13,6 +13,7 @@ interface Props {
 interface State {
   readonly loading: boolean;
   readonly consumed: Consumed;
+  readonly deleteDialogOpen: boolean;
 }
 
 class Edit extends React.Component<Props, State> {
@@ -24,10 +25,14 @@ class Edit extends React.Component<Props, State> {
     this.state = {
       loading: true,
       consumed: null,
+      deleteDialogOpen: false,
     };
 
     this.onModelChange = this.onModelChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.openDeleteDialog = this.openDeleteDialog.bind(this);
+    this.dismissDeleteDialog = this.dismissDeleteDialog.bind(this);
+    this.confirmDeleteDialog = this.confirmDeleteDialog.bind(this);
   };
 
   public async componentDidMount() {
@@ -37,6 +42,23 @@ class Edit extends React.Component<Props, State> {
 
   protected onModelChange(consumed: Consumed) {
     this.setState({ consumed });
+  }
+
+  protected openDeleteDialog() {
+    this.setState({
+      deleteDialogOpen: true,
+    });
+  }
+
+  protected dismissDeleteDialog() {
+    this.setState({
+      deleteDialogOpen: false,
+    });
+  }
+
+  protected async confirmDeleteDialog() {
+    await this.service.delete(this.state.consumed.id);
+    this.props.history.push('/consumed');
   }
 
   protected async onSubmit() {
@@ -63,6 +85,13 @@ class Edit extends React.Component<Props, State> {
             color="primary"
             component={LinkAdapter}
             to={`/consumed/${this.props.id}`}>View</Button>
+
+          {this.props.id
+            ? <Button className="button"
+              variant="contained"
+              color="secondary"
+              onClick={() => this.openDeleteDialog()}>Delete</Button>
+            : null}
         </div>
 
         {this.state.loading
@@ -70,6 +99,12 @@ class Edit extends React.Component<Props, State> {
           : <ConsumedEdit consumed={consumed}
             onModelChange={this.onModelChange}
             onSubmit={this.onSubmit} />}
+
+        <DeleteDialog open={this.state.deleteDialogOpen}
+          title="Delete consumed product"
+          text="Are you sure you want to delete consumed product?"
+          onDismiss={this.dismissDeleteDialog}
+          onConfirm={this.confirmDeleteDialog} />
       </Layout>
     );
   };
