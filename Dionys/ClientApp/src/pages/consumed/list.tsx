@@ -3,13 +3,8 @@ import {
   Breadcrumbs,
   CircularProgress,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
 } from '@material-ui/core';
-import { Layout, Link, ConsumedList, LinkAdapter } from '../../components';
+import { Layout, Link, ConsumedList, LinkAdapter, DeleteDialog } from '../../components';
 import { ServiceProvider } from '../../services';
 import { Consumed } from '../../models';
 
@@ -91,20 +86,11 @@ class List extends React.Component<{}, State> {
           ? <CircularProgress className="progress" />
           : <ConsumedList consumed={this.state.consumed} openDeleteDialog={this.openDeleteDialog} />}
 
-        <Dialog open={this.state.deleteDialogOpen} onClose={e => this.dismissDeleteDialog()}>
-          <DialogTitle>Delete consumed product</DialogTitle>
-
-          <DialogContent>
-            <DialogContentText>
-              Are you sure you want to delete consumed product?
-            </DialogContentText>
-          </DialogContent>
-
-          <DialogActions>
-            <Button onClick={e => this.dismissDeleteDialog()} color="primary">No</Button>
-            <Button onClick={e => this.confirmDeleteDialog()} color="primary" autoFocus>Yes</Button>
-          </DialogActions>
-        </Dialog>
+        <DeleteDialog open={this.state.deleteDialogOpen}
+          title="Delete consumed product"
+          text="Are you sure you want to delete consumed product?"
+          onDismiss={this.dismissDeleteDialog}
+          onConfirm={this.confirmDeleteDialog} />
       </Layout>
     );
   };
