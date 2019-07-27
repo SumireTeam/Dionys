@@ -14,5 +14,6 @@ namespace Dionys.Infrastructure.Models
         public float  Carbohydrates { get; set; }
         public float  Calories      { get; set; }
         public string Description   { get; set; }
+        public bool   IsDeleted     { get; set; }
     }
 }

@@ -52,7 +52,7 @@ namespace Dionys.Controllers
         {
             var product = await _context.Products.FindAsync(id);
 
-            if (product == null)
+            if (product == null || product.IsDeleted)
             {
                 return NotFound();
             }
@@ -71,6 +71,14 @@ namespace Dionys.Controllers
             }
 
             var product = _mapper.Map<Product>(productDto);
+
+            // Is deleted?
+            var originalProduct = _context.Products.Find(productDto);
+            if (originalProduct.Id != productDto.Id || originalProduct.IsDeleted)
+            {
+                return NotFound();
+            }
+
             _context.MarkAsModified(product);
 
             try
@@ -112,12 +120,13 @@ namespace Dionys.Controllers
         public async Task<ActionResult<ProductDTO>> DeleteProduct(Guid id)
         {
             var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            if (product == null || product.IsDeleted)
             {
                 return NotFound();
             }
 
-            _context.Products.Remove(product);
+            product.IsDeleted = true;
+
             await _context.SaveChangesAsync();
 
             return _mapper.Map<ProductDTO>(product);
