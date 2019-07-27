@@ -73,7 +73,7 @@ class Edit extends React.Component<Props, State> {
     const consumed = this.state.consumed;
 
     return (
-      <Layout title="Edit consumed">
+      <Layout title="Edit consumed product">
         <Breadcrumbs className="breadcrumbs" aria-label="Breadcrumb">
           <Link to="/">Home</Link>
           <Link to="/consumed">Consumed list</Link>

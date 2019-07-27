@@ -6,7 +6,7 @@ const Home = () => {
     <Layout title="Home">
       <ul>
         <li><Link to="/products">Products</Link></li>
-        <li><Link to="/consumed">Consumed</Link></li>
+        <li><Link to="/consumed">Consumed products</Link></li>
       </ul>
     </Layout>
   );
