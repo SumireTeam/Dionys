@@ -6,7 +6,6 @@ namespace Dionys.Tests.Setup
 {
     public class InMemoryDionysContext : DbContext, IDionysContext
     {
-        public InMemoryDionysContext() { }
         public InMemoryDionysContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Product> Products { get; set; }
