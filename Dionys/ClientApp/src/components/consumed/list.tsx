@@ -59,7 +59,7 @@ class List extends React.Component<Props, {}> {
                   variant="contained"
                   size="small"
                   color="secondary"
-                  onClick={e => this.props.openDeleteDialog(consumed)}>Delete</Button>
+                  onClick={() => this.props.openDeleteDialog(consumed)}>Delete</Button>
               </TableCell>
             </TableRow>
           ))}

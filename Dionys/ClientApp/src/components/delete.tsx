@@ -25,7 +25,7 @@ class DeleteDialog extends React.Component<Props, {}> {
 
   public render() {
     return (
-      <Dialog open={this.props.open} onClose={e => this.props.onDismiss()}>
+      <Dialog open={this.props.open} onClose={() => this.props.onDismiss()}>
         <DialogTitle>{this.props.title}</DialogTitle>
 
         <DialogContent>
@@ -33,8 +33,8 @@ class DeleteDialog extends React.Component<Props, {}> {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={e => this.props.onDismiss()} color="primary">No</Button>
-          <Button onClick={e => this.props.onConfirm()} color="primary" autoFocus>Yes</Button>
+          <Button onClick={() => this.props.onDismiss()} color="primary">No</Button>
+          <Button onClick={() => this.props.onConfirm()} color="primary" autoFocus>Yes</Button>
         </DialogActions>
       </Dialog>
     );
