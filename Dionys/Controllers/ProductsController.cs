@@ -30,7 +30,7 @@ namespace Dionys.Controllers
         [HttpGet]
         public IQueryable<ProductDTO> GetProducts()
         {
-            var products = from p in _context.Products select _mapper.Map<ProductDTO>(p);
+            var products = from p in _context.Products where !p.IsDeleted select _mapper.Map<ProductDTO>(p);
 
             return products;
         }
