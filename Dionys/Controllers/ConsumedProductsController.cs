@@ -6,7 +6,6 @@ using AutoMapper;
 using Dionys.Infrastructure.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Dionys.Models;
 using Dionys.Models.DTO;
 
 namespace Dionys.Controllers
@@ -15,11 +14,11 @@ namespace Dionys.Controllers
     [ApiController]
     public class ConsumedProductsController : ControllerBase
     {
-        private readonly IDionysContext _context;
+        private readonly DionysContext _context;
 
         private readonly IMapper _mapper;
 
-        public ConsumedProductsController(IDionysContext context, IMapper mapper)
+        public ConsumedProductsController(DionysContext context, IMapper mapper)
         {
             _context = context;
             _mapper  = mapper;
@@ -29,7 +28,7 @@ namespace Dionys.Controllers
         [HttpGet]
         public IEnumerable<ConsumedProductResponseDTO> GetConsumedProducts()
         {
-            var consumedProductDtos = from consumedProduct in _context.ConsumedProducts
+            var consumedProductDtos = from consumedProduct in _context.ConsumedProducts.Include(x => x.Product)
                                 select _mapper.Map<ConsumedProductResponseDTO>(consumedProduct);
 
             return consumedProductDtos;
@@ -37,14 +36,18 @@ namespace Dionys.Controllers
 
         // GET: api/ConsumedProducts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ConsumedProductResponseDTO>> GetConsumedProduct(Guid id)
+        public ActionResult<ConsumedProductResponseDTO> GetConsumedProduct(Guid id)
         {
-            var consumedProduct = await _context.ConsumedProducts.FindAsync(id);
+            var consumedProduct = _context.ConsumedProducts.Find(id);
 
             if (consumedProduct == null)
             {
                 return NotFound();
             }
+
+            _context.Entry(consumedProduct)
+                .Reference(x => x.Product)
+                .Load();
 
             return _mapper.Map<ConsumedProductResponseDTO>(consumedProduct);
         }

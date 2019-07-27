@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Dionys.Infrastructure.Migrations
 {
     [DbContext(typeof(DionysContext))]
-    [Migration("20190725074531_Initial")]
-    partial class Initial
+    [Migration("20190727031901_ProductSoftDelete")]
+    partial class ProductSoftDelete
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace Dionys.Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("Dionys.Models.ConsumedProduct", b =>
+            modelBuilder.Entity("Dionys.Infrastructure.Models.ConsumedProduct", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -39,7 +39,7 @@ namespace Dionys.Infrastructure.Migrations
                     b.ToTable("ConsumedProducts");
                 });
 
-            modelBuilder.Entity("Dionys.Models.Product", b =>
+            modelBuilder.Entity("Dionys.Infrastructure.Models.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -51,6 +51,8 @@ namespace Dionys.Infrastructure.Migrations
                     b.Property<string>("Description");
 
                     b.Property<float>("Fat");
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("Name");
 
@@ -68,6 +70,7 @@ namespace Dionys.Infrastructure.Migrations
                             Carbohydrates = 4.5f,
                             Description = "Баклажан как баклажан. На вкус как баклажан, на вид как баклажан. Ничего удивительного.",
                             Fat = 0.1f,
+                            IsDeleted = false,
                             Name = "Баклажан",
                             Protein = 1.2f
                         },
@@ -78,6 +81,7 @@ namespace Dionys.Infrastructure.Migrations
                             Carbohydrates = 58f,
                             Description = "Вкусная шоколадка. Жаль, что мало. Хотелось бы ещё. Обязательно надо закупать огромными партиями.",
                             Fat = 34f,
+                            IsDeleted = false,
                             Name = "Alpen Gold. Молочный шоколад. Чернично-йогуртовая начинка, 90 г",
                             Protein = 3.9f
                         },
@@ -88,6 +92,7 @@ namespace Dionys.Infrastructure.Migrations
                             Carbohydrates = 0f,
                             Description = "Цыплёнок как циплёнок. На вкус был как цыплёнок...",
                             Fat = 13f,
+                            IsDeleted = false,
                             Name = "Сибирские колбасы. Окорочок цыплёнка-бройлера, 260 г",
                             Protein = 10f
                         },
@@ -98,14 +103,15 @@ namespace Dionys.Infrastructure.Migrations
                             Carbohydrates = 66f,
                             Description = "Внешний вид напоминает крекеры. На упаковке написано \"крекеры\". Возможно крекеры.",
                             Fat = 24f,
+                            IsDeleted = false,
                             Name = "Яшкино. Французский крекер с кунжутом, 185 г",
                             Protein = 8.5f
                         });
                 });
 
-            modelBuilder.Entity("Dionys.Models.ConsumedProduct", b =>
+            modelBuilder.Entity("Dionys.Infrastructure.Models.ConsumedProduct", b =>
                 {
-                    b.HasOne("Dionys.Models.Product", "Product")
+                    b.HasOne("Dionys.Infrastructure.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
                 });

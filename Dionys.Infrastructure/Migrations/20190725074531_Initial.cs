@@ -1,7 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Dionys.Migrations
+namespace Dionys.Infrastructure.Migrations
 {
     public partial class Initial : Migration
     {
