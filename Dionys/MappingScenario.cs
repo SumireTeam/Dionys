@@ -1,5 +1,6 @@
 using System;
 using AutoMapper;
+using Dionys.Infrastructure.Models;
 using Dionys.Models;
 using Dionys.Models.DTO;
 

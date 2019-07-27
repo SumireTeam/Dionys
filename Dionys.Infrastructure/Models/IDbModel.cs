@@ -1,4 +1,4 @@
-namespace Dionys.Models
+namespace Dionys.Infrastructure.Models
 {
     public interface IDbModel
     {

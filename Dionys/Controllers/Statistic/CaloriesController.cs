@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Dionys.Models;
+using Dionys.Infrastructure.Models;
 using Dionys.Models.ViewModels;
 using Dionys.Models.ViewModels.Statistic;
 using Microsoft.AspNetCore.Mvc;
@@ -24,10 +24,9 @@ namespace Dionys.Controllers.Statistic
         /// <summary>
         /// Calories entity list
         /// </summary>
-        /// <param name="paging"></param>
         /// <returns></returns>
         [HttpGet]
-        public ConsumedProductsTotal GetCaloriesTotal([FromQuery] PagingParameterModel paging)
+        public ConsumedProductsTotal GetCaloriesTotal()
         {
             var consumedProductsByWeek = _context.ConsumedProducts.Local;
 

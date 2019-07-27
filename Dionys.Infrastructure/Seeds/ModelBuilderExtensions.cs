@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Dionys.Models;
+using Dionys.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dionys.Infrastructure.Seeds

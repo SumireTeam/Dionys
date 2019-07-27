@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Dionys.Infrastructure.Seeds;
-using Dionys.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dionys.Infrastructure.Models

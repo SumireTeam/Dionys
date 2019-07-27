@@ -1,6 +1,6 @@
 using System;
 
-namespace Dionys.Models
+namespace Dionys.Infrastructure.Models
 {
     /// <summary>
     /// Consumed Product Entity

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dionys.Models
+namespace Dionys.Infrastructure.Models
 {
     public interface IDionysContext
     {

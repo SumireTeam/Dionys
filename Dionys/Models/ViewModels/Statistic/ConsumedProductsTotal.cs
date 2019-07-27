@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Dionys.Infrastructure.Models;
 
 namespace Dionys.Models.ViewModels.Statistic
 {
