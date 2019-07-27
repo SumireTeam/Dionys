@@ -31,7 +31,7 @@ ReactDOM.render(
         render={props => <ProductCreate history={props.history} />} />
 
       <Route exact path="/products/:id"
-        render={props => <ProductShow {...props.match.params} />} />
+        render={props => <ProductShow {...props.match.params} history={props.history} />} />
 
       <Route exact path="/products/:id/edit"
         render={props => <ProductEdit {...props.match.params} history={props.history} />} />
@@ -43,7 +43,7 @@ ReactDOM.render(
         render={props => <ConsumedCreate history={props.history} />} />
 
       <Route exact path="/consumed/:id"
-        render={props => <ConsumedShow {...props.match.params} />} />
+        render={props => <ConsumedShow {...props.match.params} history={props.history} />} />
 
       <Route exact path="/consumed/:id/edit"
         render={props => <ConsumedEdit {...props.match.params} history={props.history} />} />
