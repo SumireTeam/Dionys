@@ -2,14 +2,19 @@ using System;
 
 namespace Dionys.Models.DTO
 {
-    public class ConsumedProductRequestDTO
+    public class ConsumedProductResponseViewModel
     {
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Consumed product ID
+        /// Consumed product id
         /// </summary>
         public Guid ProductId { get; set; }
+
+        /// <summary>
+        /// Consumed product
+        /// </summary>
+        public ProductViewModel Product { get; set; }
 
         /// <summary>
         /// Consumed product weight

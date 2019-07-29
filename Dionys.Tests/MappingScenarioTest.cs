@@ -35,21 +35,21 @@ namespace Dionys.Tests
                 Protein = 22.6F
             };
 
-            ProductDTO productDTO = _mapper.Map<ProductDTO>(product);
+            ProductViewModel productViewModel = _mapper.Map<ProductViewModel>(product);
 
-            Assert.Equal(product.Calories, productDTO.Calories);
-            Assert.Equal(product.Carbohydrates, productDTO.Carbohydrates);
-            Assert.Equal(product.Description, productDTO.Description);
-            Assert.Equal(product.Fat, productDTO.Fat);
-            Assert.Equal(product.Id, productDTO.Id);
-            Assert.Equal(product.Name, productDTO.Name);
-            Assert.Equal(product.Protein, productDTO.Protein);
+            Assert.Equal(product.Calories, productViewModel.Calories);
+            Assert.Equal(product.Carbohydrates, productViewModel.Carbohydrates);
+            Assert.Equal(product.Description, productViewModel.Description);
+            Assert.Equal(product.Fat, productViewModel.Fat);
+            Assert.Equal(product.Id, productViewModel.Id);
+            Assert.Equal(product.Name, productViewModel.Name);
+            Assert.Equal(product.Protein, productViewModel.Protein);
         }
 
         [Fact]
         public void Test_ProductDTO_To_Product_Success()
         {
-            ProductDTO productDTO = new ProductDTO
+            ProductViewModel productViewModel = new ProductViewModel
             {
                 Calories = 992.5F,
                 Carbohydrates = 12.5F,
@@ -60,15 +60,15 @@ namespace Dionys.Tests
                 Protein = 22.6F
             };
 
-            Product product = _mapper.Map<Product>(productDTO);
+            Product product = _mapper.Map<Product>(productViewModel);
 
-            Assert.Equal(product.Calories, productDTO.Calories);
-            Assert.Equal(product.Carbohydrates, productDTO.Carbohydrates);
-            Assert.Equal(product.Description, productDTO.Description);
-            Assert.Equal(product.Fat, productDTO.Fat);
-            Assert.Equal(product.Id, productDTO.Id);
-            Assert.Equal(product.Name, productDTO.Name);
-            Assert.Equal(product.Protein, productDTO.Protein);
+            Assert.Equal(product.Calories, productViewModel.Calories);
+            Assert.Equal(product.Carbohydrates, productViewModel.Carbohydrates);
+            Assert.Equal(product.Description, productViewModel.Description);
+            Assert.Equal(product.Fat, productViewModel.Fat);
+            Assert.Equal(product.Id, productViewModel.Id);
+            Assert.Equal(product.Name, productViewModel.Name);
+            Assert.Equal(product.Protein, productViewModel.Protein);
         }
 
         [Fact]
@@ -86,26 +86,26 @@ namespace Dionys.Tests
                 Description = "Баклажан как баклажан. На вкус как баклажан, на вид как баклажан. Ничего удивительного."
             };
 
-            ConsumedProductRequestDTO consumedProductRequestDTO = new ConsumedProductRequestDTO
+            ConsumedProductRequestViewModel consumedProductRequestViewModel = new ConsumedProductRequestViewModel
             {
                 Id        = new Guid("274684A2-D52B-4FB8-8BAD-1F065BA760AA"),
                 ProductId = new Guid("274684A2-D52B-4FB8-8BAD-1F065BA76071"),
                 Timestamp = new DateTime(2017, 05, 06),
                 Weight    = 600
             };
-            
+
             // Put Sample Product to Database
             _context.Products.Add(product);
             _context.SaveChanges();
 
             // Convert
-            ConsumedProduct consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductRequestDTO);
+            ConsumedProduct consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductRequestViewModel);
 
             // Check
-            Assert.Equal(consumedProduct.Id, consumedProductRequestDTO.Id);
-            Assert.Equal(consumedProduct.Product.Id, consumedProductRequestDTO.ProductId);
-            Assert.Equal(consumedProduct.Timestamp, consumedProductRequestDTO.Timestamp);
-            Assert.Equal(consumedProduct.Weight, consumedProductRequestDTO.Weight);
+            Assert.Equal(consumedProduct.Id, consumedProductRequestViewModel.Id);
+            Assert.Equal(consumedProduct.Product.Id, consumedProductRequestViewModel.ProductId);
+            Assert.Equal(consumedProduct.Timestamp, consumedProductRequestViewModel.Timestamp);
+            Assert.Equal(consumedProduct.Weight, consumedProductRequestViewModel.Weight);
         }
 
         [Fact]
@@ -132,15 +132,15 @@ namespace Dionys.Tests
                 Weight = 90
             };
 
-            ConsumedProductResponseDTO consumedProductResponseDTO =
-                _mapper.Map<ConsumedProductResponseDTO>(consumedProduct);
+            ConsumedProductResponseViewModel consumedProductResponseViewModel =
+                _mapper.Map<ConsumedProductResponseViewModel>(consumedProduct);
 
             // Check
-            Assert.Equal(consumedProduct.Id, consumedProductResponseDTO.Id);
-            Assert.Equal(consumedProduct.Product.Id, consumedProductResponseDTO.ProductId);
-            Assert.Equal(consumedProduct.Product.Id, consumedProductResponseDTO.Product.Id);
-            Assert.Equal(consumedProduct.Timestamp, consumedProductResponseDTO.Timestamp);
-            Assert.Equal(consumedProduct.Weight, consumedProductResponseDTO.Weight);
+            Assert.Equal(consumedProduct.Id, consumedProductResponseViewModel.Id);
+            Assert.Equal(consumedProduct.Product.Id, consumedProductResponseViewModel.ProductId);
+            Assert.Equal(consumedProduct.Product.Id, consumedProductResponseViewModel.Product.Id);
+            Assert.Equal(consumedProduct.Timestamp, consumedProductResponseViewModel.Timestamp);
+            Assert.Equal(consumedProduct.Weight, consumedProductResponseViewModel.Weight);
         }
     }
 }

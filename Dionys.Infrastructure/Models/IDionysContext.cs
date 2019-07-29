@@ -11,5 +11,6 @@ namespace Dionys.Infrastructure.Models
         int        SaveChanges();
         Task<int>  SaveChangesAsync();
         void       MarkAsModified(IDbModel item);
+        void       MarkAsUnchanged(IDbModel item);
     }
 }

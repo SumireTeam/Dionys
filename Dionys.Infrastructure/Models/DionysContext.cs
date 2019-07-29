@@ -27,5 +27,10 @@ namespace Dionys.Infrastructure.Models
         {
             Entry(item).State = EntityState.Modified;
         }
+
+        public void MarkAsUnchanged(IDbModel item)
+        {
+            Entry(item).State = EntityState.Unchanged;
+        }
     }
 }

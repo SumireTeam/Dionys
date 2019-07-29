@@ -20,5 +20,10 @@ namespace Dionys.Tests.Setup
         {
             Entry(item).State = EntityState.Modified;
         }
+
+        public void MarkAsUnchanged(IDbModel item)
+        {
+            Entry(item).State = EntityState.Unchanged;
+        }
     }
 }

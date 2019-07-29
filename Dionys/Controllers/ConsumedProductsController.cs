@@ -26,17 +26,17 @@ namespace Dionys.Controllers
 
         // GET: api/ConsumedProducts
         [HttpGet]
-        public IEnumerable<ConsumedProductResponseDTO> GetConsumedProducts()
+        public IEnumerable<ConsumedProductResponseViewModel> GetConsumedProducts()
         {
             var consumedProductDtos = from consumedProduct in _context.ConsumedProducts.Include(x => x.Product)
-                                select _mapper.Map<ConsumedProductResponseDTO>(consumedProduct);
+                                select _mapper.Map<ConsumedProductResponseViewModel>(consumedProduct);
 
             return consumedProductDtos;
         }
 
         // GET: api/ConsumedProducts/5
         [HttpGet("{id}")]
-        public ActionResult<ConsumedProductResponseDTO> GetConsumedProduct(Guid id)
+        public ActionResult<ConsumedProductResponseViewModel> GetConsumedProduct(Guid id)
         {
             var consumedProduct = _context.ConsumedProducts.Find(id);
 
@@ -49,19 +49,19 @@ namespace Dionys.Controllers
                 .Reference(x => x.Product)
                 .Load();
 
-            return _mapper.Map<ConsumedProductResponseDTO>(consumedProduct);
+            return _mapper.Map<ConsumedProductResponseViewModel>(consumedProduct);
         }
 
         // PUT: api/ConsumedProducts/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutConsumedProduct(Guid id, ConsumedProductRequestDTO consumedProductRequestDTO)
+        public async Task<IActionResult> PutConsumedProduct(Guid id, ConsumedProductRequestViewModel consumedProductRequestViewModel)
         {
-            if (id != consumedProductRequestDTO.Id)
+            if (id != consumedProductRequestViewModel.Id)
             {
                 return BadRequest();
             }
 
-            var consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductRequestDTO);
+            var consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductRequestViewModel);
 
             _context.MarkAsModified(consumedProduct);
 
@@ -86,25 +86,25 @@ namespace Dionys.Controllers
 
         // POST: api/ConsumedProducts
         [HttpPost]
-        public async Task<ActionResult<ConsumedProductResponseDTO>> PostConsumedProduct(ConsumedProductRequestDTO consumedProductReqestDTO)
+        public async Task<ActionResult<ConsumedProductResponseViewModel>> PostConsumedProduct(ConsumedProductRequestViewModel consumedProductReqestViewModel)
         {
-            ConsumedProduct consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductReqestDTO);
+            ConsumedProduct consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductReqestViewModel);
 
             // HACK: EF trying to insert new entity Product
-            Product product = _context.Products.Find(consumedProductReqestDTO.ProductId);
+            Product product = _context.Products.Find(consumedProductReqestViewModel.ProductId);
             consumedProduct.Product = product;
 
             _context.ConsumedProducts.Add(consumedProduct);
             await _context.SaveChangesAsync();
 
-            var consumedProductResponseDTO = _mapper.Map<ConsumedProductResponseDTO>(consumedProduct);
+            var consumedProductResponseDTO = _mapper.Map<ConsumedProductResponseViewModel>(consumedProduct);
 
             return CreatedAtAction("GetConsumedProduct", new { id = consumedProductResponseDTO.Id }, consumedProductResponseDTO);
         }
 
         // DELETE: api/ConsumedProducts/5
         [HttpDelete("{id}")]
-        public ActionResult<ConsumedProductRequestDTO> DeleteConsumedProduct(Guid id)
+        public ActionResult<ConsumedProductRequestViewModel> DeleteConsumedProduct(Guid id)
         {
             var consumedProduct = _context.ConsumedProducts.Find(id);
             if (consumedProduct == null)
@@ -115,7 +115,7 @@ namespace Dionys.Controllers
             _context.ConsumedProducts.Remove(consumedProduct);
             _context.SaveChanges();
 
-            return _mapper.Map<ConsumedProductRequestDTO>(consumedProduct);
+            return _mapper.Map<ConsumedProductRequestViewModel>(consumedProduct);
         }
 
         private bool ConsumedProductExists(Guid id)

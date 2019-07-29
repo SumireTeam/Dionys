@@ -1,8 +1,8 @@
 using System;
 
-namespace Dionys.Models.DTO
+namespace Dionys.Infrastructure.Models.DTO
 {
-    public class ConsumedProductResponseDTO
+    public class ConsumedProductDTO
     {
         public Guid Id { get; set; }
 
@@ -10,11 +10,6 @@ namespace Dionys.Models.DTO
         /// Consumed product id
         /// </summary>
         public Guid ProductId { get; set; }
-
-        /// <summary>
-        /// Consumed product
-        /// </summary>
-        public ProductDTO Product { get; set; }
 
         /// <summary>
         /// Consumed product weight

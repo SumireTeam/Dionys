@@ -1,6 +1,6 @@
 using System;
 
-namespace Dionys.Models.DTO
+namespace Dionys.Infrastructure.Models.DTO
 {
     public class ProductDTO
     {

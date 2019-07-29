@@ -8,11 +8,11 @@ namespace Dionys
     public class MappingScenario : Profile
     {
         public MappingScenario(IDionysContext context)
-        { 
-            CreateMap<ProductDTO, Product>();
-            CreateMap<Product, ProductDTO>();
+        {
+            CreateMap<ProductViewModel, Product>();
+            CreateMap<Product, ProductViewModel>();
 
-            CreateMap<ConsumedProductRequestDTO, ConsumedProduct>()
+            CreateMap<ConsumedProductRequestViewModel, ConsumedProduct>()
                 .ForMember(d => d.Product, opt => opt.Ignore())
                 .AfterMap((d, e) => { e.Product = context.Products.Find(d.ProductId); });
         }
@@ -22,13 +22,13 @@ namespace Dionys
     {
         public NestedMappingScenario(IDionysContext context, IMapper mapper)
         {
-            CreateMap<ConsumedProduct, ConsumedProductResponseDTO>()
+            CreateMap<ConsumedProduct, ConsumedProductResponseViewModel>()
                 .ForMember(d => d.Product, opt => opt.Ignore())
                 .ForMember(d => d.ProductId, opt => opt.Ignore())
-                .AfterMap((s, d) => { d.Product = mapper.Map<ProductDTO>(context.Products.Find(s.Product?.Id)); })
+                .AfterMap((s, d) => { d.Product = mapper.Map<ProductViewModel>(context.Products.Find(s.Product?.Id)); })
                 .AfterMap((s, d) => { d.ProductId = s.Product?.Id ?? Guid.Empty; });
 
-            CreateMap<ConsumedProduct, ConsumedProductRequestDTO>()
+            CreateMap<ConsumedProduct, ConsumedProductRequestViewModel>()
                 .ForMember(d => d.ProductId, opt => opt.Ignore())
                 .AfterMap((s, d) => { d.ProductId = s.Product?.Id ?? Guid.Empty; });
         }

@@ -28,27 +28,27 @@ namespace Dionys.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public IQueryable<ProductDTO> GetProducts()
+        public IQueryable<ProductViewModel> GetProducts()
         {
-            var products = from p in _context.Products where !p.IsDeleted select _mapper.Map<ProductDTO>(p);
+            var products = from p in _context.Products where !p.IsDeleted select _mapper.Map<ProductViewModel>(p);
 
             return products;
         }
 
         // GET: api/Products/name/{name}
         [HttpGet("search/{name}")]
-        public IQueryable<ProductDTO> GetProductsSearch(string name)
+        public IQueryable<ProductViewModel> GetProductsSearch(string name)
         {
             var products = from p in _context.Products
                 where EF.Functions.Like(p.Name, name)
-                select _mapper.Map<ProductDTO>(p);
+                select _mapper.Map<ProductViewModel>(p);
 
             return products;
         }
 
         // GET: api/Products/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductDTO>> GetProduct(Guid id)
+        public async Task<ActionResult<ProductViewModel>> GetProduct(Guid id)
         {
             var product = await _context.Products.FindAsync(id);
 
@@ -57,24 +57,24 @@ namespace Dionys.Controllers
                 return NotFound();
             }
 
-            var dtoProduct = _mapper.Map<ProductDTO>(product);
+            var dtoProduct = _mapper.Map<ProductViewModel>(product);
             return dtoProduct;
         }
 
         // PUT: api/Products/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(Guid id, ProductDTO productDto)
+        public async Task<IActionResult> PutProduct(Guid id, ProductViewModel productViewModel)
         {
-            if (id != productDto.Id)
+            if (id != productViewModel.Id)
             {
                 return BadRequest();
             }
 
-            var product = _mapper.Map<Product>(productDto);
+            var product = _mapper.Map<Product>(productViewModel);
 
             // Is deleted?
-            var originalProduct = _context.Products.Find(productDto);
-            if (originalProduct.Id != productDto.Id || originalProduct.IsDeleted)
+            var originalProduct = _context.Products.Find(productViewModel);
+            if (originalProduct.Id != productViewModel.Id || originalProduct.IsDeleted)
             {
                 return NotFound();
             }
@@ -100,9 +100,9 @@ namespace Dionys.Controllers
 
         // POST: api/Products
         [HttpPost]
-        public async Task<ActionResult<ProductDTO>> PostProduct(ProductDTO productDto)
+        public async Task<ActionResult<ProductViewModel>> PostProduct(ProductViewModel productViewModel)
         {
-            Product product = _mapper.Map<Product>(productDto);
+            Product product = _mapper.Map<Product>(productViewModel);
 
             do
             {
@@ -112,12 +112,12 @@ namespace Dionys.Controllers
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduct", new { id = product.Id }, _mapper.Map<ProductDTO>(product));
+            return CreatedAtAction("GetProduct", new { id = product.Id }, _mapper.Map<ProductViewModel>(product));
         }
 
         // DELETE: api/Products/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ProductDTO>> DeleteProduct(Guid id)
+        public async Task<ActionResult<ProductViewModel>> DeleteProduct(Guid id)
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null || product.IsDeleted)
@@ -129,7 +129,7 @@ namespace Dionys.Controllers
 
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<ProductDTO>(product);
+            return _mapper.Map<ProductViewModel>(product);
         }
 
         private bool ProductExists(Guid id)
