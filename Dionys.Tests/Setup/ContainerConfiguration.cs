@@ -14,14 +14,13 @@ namespace Dionys.Tests.Setup
         {
             IServiceCollection services = new ServiceCollection();
 
-            services.AddEntityFrameworkInMemoryDatabase();
-
             services.AddDbContext<InMemoryDionysContext>(opt => opt.UseInMemoryDatabase(databaseName: "dionys"));
-
-            services.AddTransient<IDionysContext, InMemoryDionysContext>();
-            services.AddTransient<MappingScenario>();
-
             _serviceProvider = services.BuildServiceProvider();
+            services.AddSingleton<IDionysContext>(provider => provider.GetService<InMemoryDionysContext>());
+            _serviceProvider = services.BuildServiceProvider();
+            services.AddTransient<MappingScenario>();
+            _serviceProvider = services.BuildServiceProvider();
+
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(_serviceProvider.GetService<MappingScenario>());
@@ -37,6 +36,8 @@ namespace Dionys.Tests.Setup
 
             IMapper nestedMapper = mappingConfigNested.CreateMapper();
             services.AddSingleton(nestedMapper);
+
+            _serviceProvider = services.BuildServiceProvider();
         }
 
         internal IServiceProvider GetServiceProvider()

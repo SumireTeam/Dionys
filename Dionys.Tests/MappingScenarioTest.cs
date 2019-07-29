@@ -11,19 +11,14 @@ namespace Dionys.Tests
     public class MappingScenarioTest
     {
         private readonly IMapper        _mapper;
-        private readonly IDionysContext _context;
+        private readonly InMemoryDionysContext _context;
 
         public MappingScenarioTest()
         {
             IServiceProvider serviceProvider = new ContainerConfiguration().GetServiceProvider();
 
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(serviceProvider.GetService<MappingScenario>());
-            });
-
-            _mapper  = mappingConfig.CreateMapper();
-            _context = serviceProvider.GetService<IDionysContext>();
+            _mapper  = serviceProvider.GetService<IMapper>();
+            _context = serviceProvider.GetService<InMemoryDionysContext>();
         }
 
         [Fact]
@@ -111,6 +106,41 @@ namespace Dionys.Tests
             Assert.Equal(consumedProduct.Product.Id, consumedProductRequestDTO.ProductId);
             Assert.Equal(consumedProduct.Timestamp, consumedProductRequestDTO.Timestamp);
             Assert.Equal(consumedProduct.Weight, consumedProductRequestDTO.Weight);
+        }
+
+        [Fact]
+        public void ConsumedProduct_To_ConsumedProductResponseDTO_Success()
+        {
+            // Create Sample Product
+            Product product = new Product
+            {
+                Id = new Guid("274684A2-D52B-4FB8-8BAD-1F065BA76071"),
+                Name = "Баклажан",
+                Protein = 1.2f,
+                Fat = 0.1f,
+                Carbohydrates = 4.5f,
+                Calories = 24f,
+                Description = "Баклажан как баклажан. На вкус как баклажан, на вид как баклажан. Ничего удивительного."
+            };
+
+            // Create Sample ConsumedProduct entity
+            ConsumedProduct consumedProduct = new ConsumedProduct
+            {
+                Id = new Guid("274684A2-D52B-4FB8-8BAD-1F065BA76074"),
+                Product = product,
+                Timestamp = new DateTime(2017,05, 06),
+                Weight = 90
+            };
+
+            ConsumedProductResponseDTO consumedProductResponseDTO =
+                _mapper.Map<ConsumedProductResponseDTO>(consumedProduct);
+
+            // Check
+            Assert.Equal(consumedProduct.Id, consumedProductResponseDTO.Id);
+            Assert.Equal(consumedProduct.Product.Id, consumedProductResponseDTO.ProductId);
+            Assert.Equal(consumedProduct.Product.Id, consumedProductResponseDTO.Product.Id);
+            Assert.Equal(consumedProduct.Timestamp, consumedProductResponseDTO.Timestamp);
+            Assert.Equal(consumedProduct.Weight, consumedProductResponseDTO.Weight);
         }
     }
 }
