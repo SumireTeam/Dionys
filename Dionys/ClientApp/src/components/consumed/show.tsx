@@ -21,7 +21,7 @@ const Show = ({ consumed }: Props) => {
       <TableBody>
         <TableRow>
           <TableCell component="th" scope="row">Product</TableCell>
-          <TableCell>{consumed.productId}</TableCell>
+          <TableCell>{consumed.product.name}</TableCell>
         </TableRow>
 
         <TableRow>

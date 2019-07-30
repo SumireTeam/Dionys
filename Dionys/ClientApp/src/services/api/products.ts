@@ -1,4 +1,4 @@
-import { ApiCrudService } from './service';
+import { ApiCrudService, ApiServiceError, request } from './service';
 import { Product } from '../../models';
 import { ProductService } from '../products';
 
@@ -40,5 +40,16 @@ export class ApiProductService extends ApiCrudService<ProductData, Product>
       carbohydrates: +model.carbs,
       calories: +model.calories,
     };
+  }
+
+  public async search(name: string): Promise<Product[]> {
+    name = name.replace(/[%_]/g, '');
+    const response = await request('get', `products/search/%${name}%`);
+    if (response.status !== 200) {
+      throw new ApiServiceError(response);
+    }
+
+    const items = await response.json() as ProductData[];
+    return items.map(this.mapToModel);
   }
 }

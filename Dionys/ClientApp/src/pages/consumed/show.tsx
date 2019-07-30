@@ -63,7 +63,7 @@ class Show extends React.Component<Props, State> {
     const consumed = this.state.consumed;
 
     return (
-      <Layout title="Consumed">
+      <Layout title="Consumed product">
         <Breadcrumbs className="breadcrumbs" aria-label="Breadcrumb">
           <Link to="/">Home</Link>
           <Link to="/consumed">Consumed list</Link>

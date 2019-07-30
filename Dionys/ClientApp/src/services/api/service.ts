@@ -14,7 +14,7 @@ export class ApiServiceError extends Error {
   }
 }
 
-function request(method: string, endpoint: string, data: object = null) {
+export function request(method: string, endpoint: string, data: object = null) {
   const options: RequestInit = {
     method,
     headers: {

@@ -37,7 +37,7 @@ class List extends React.Component<Props, {}> {
         <TableBody>
           {this.props.consumed.map(consumed => (
             <TableRow key={consumed.id}>
-              <TableCell component="th" scope="row">{consumed.productId}</TableCell>
+              <TableCell component="th" scope="row">{consumed.product.name}</TableCell>
               <TableCell align="right">{consumed.weight}</TableCell>
               <TableCell>{consumed.date.toISOString()}</TableCell>
 

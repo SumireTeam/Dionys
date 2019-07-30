@@ -1,10 +1,12 @@
 import { ApiCrudService } from './service';
 import { Consumed } from '../../models';
 import { ConsumedService } from '../consumed';
+import { ProductData } from './products';
 
 export interface ConsumedData {
   readonly id: string;
   readonly productId: string;
+  readonly product?: ProductData;
   readonly weight: number;
   readonly timestamp: string;
 }
@@ -19,6 +21,15 @@ export class ApiConsumedService extends ApiCrudService<ConsumedData, Consumed>
     return {
       id: data.id,
       productId: data.productId,
+      product: {
+        id: data.id,
+        name: data.product.name,
+        description: data.product.description,
+        protein: +data.product.protein,
+        fat: +data.product.fat,
+        carbs: +data.product.carbohydrates,
+        calories: +data.product.calories,
+      },
       weight: +data.weight,
       date: new Date(data.timestamp),
     };

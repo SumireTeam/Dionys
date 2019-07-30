@@ -69,7 +69,7 @@ class List extends React.Component<{}, State> {
 
   public render() {
     return (
-      <Layout title="Consumed list">
+      <Layout title="Consumed product list">
         <Breadcrumbs className="breadcrumbs" aria-label="Breadcrumb">
           <Link to="/">Home</Link>
         </Breadcrumbs>
