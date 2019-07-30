@@ -1,6 +1,9 @@
 import React from 'react';
 import { TextField, Button } from '@material-ui/core';
+import AsyncSelect from 'react-select/async';
 import { Consumed } from '../../models';
+import { ServiceProvider } from '../../services';
+import Select from '../select';
 
 interface Props {
   consumed: Consumed;
@@ -10,6 +13,22 @@ interface Props {
 
 interface State {
   readonly nameTouched: boolean;
+}
+
+interface Option {
+  readonly value: string;
+  readonly label: string;
+}
+
+const search = async (name: string, callback: (options: Option[]) => void) => {
+  const service = ServiceProvider.productService;
+  const products = await service.search(name);
+  const options = products.map(product => ({
+    value: product.id,
+    label: product.name,
+  }));
+
+  callback(options);
 }
 
 const numRegExp = new RegExp(/^\d+(\.\d+)?$/);
@@ -26,15 +45,24 @@ class Edit extends React.Component<Props, State> {
 
     const onChange = this.props.onModelChange;
 
+    const defaultProduct = this.props.consumed.product
+      ? {
+        label: this.props.consumed.product.name,
+        value: this.props.consumed.product.id,
+      }
+      : {
+        label: '',
+        value: '',
+      };
+
     return (
       <form className="form" noValidate autoComplete="off">
-        <TextField className="field"
-          variant="outlined"
+        <Select className="field"
           label="Product"
-          value={this.props.consumed.productId}
-          onChange={e => onChange({ ...this.props.consumed, productId: e.target.value })}
-          fullWidth
-          required />
+          cacheOptions
+          loadOptions={search}
+          defaultValue={defaultProduct}
+          onChange={(e: any) => onChange({ ...this.props.consumed, productId: e.value })} />
 
         <TextField className="field"
           variant="outlined"
