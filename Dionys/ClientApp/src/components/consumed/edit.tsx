@@ -1,9 +1,9 @@
 import React from 'react';
 import { TextField, Button } from '@material-ui/core';
-import AsyncSelect from 'react-select/async';
 import { Consumed } from '../../models';
 import { ServiceProvider } from '../../services';
 import Select from '../select';
+import { getDate, setDate, getTime, setTime } from '../../models';
 
 interface Props {
   consumed: Consumed;
@@ -75,13 +75,29 @@ class Edit extends React.Component<Props, State> {
           fullWidth
           required />
 
-        <TextField className="field"
-          variant="outlined"
-          label="Date"
-          value={this.props.consumed.date.toISOString()}
-          onChange={e => onChange({ ...this.props.consumed, date: new Date(e.target.value) })}
-          fullWidth
-          required />
+        <div>
+          <TextField className="field"
+            variant="outlined"
+            label="Date"
+            type="date"
+            value={getDate(this.props.consumed.date)}
+            onChange={e => onChange({
+              ...this.props.consumed,
+              date: setDate(this.props.consumed.date, e.target.value),
+            })}
+            required />
+
+          <TextField className="field"
+            variant="outlined"
+            label="Time"
+            type="time"
+            value={getTime(this.props.consumed.date)}
+            onChange={e => onChange({
+              ...this.props.consumed,
+              date: setTime(this.props.consumed.date, e.target.value),
+            })}
+            required />
+        </div>
 
         <Button className="button"
           variant="contained"

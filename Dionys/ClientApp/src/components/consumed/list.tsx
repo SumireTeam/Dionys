@@ -7,7 +7,7 @@ import {
   TableCell,
   Button,
 } from '@material-ui/core';
-import { Consumed } from '../../models';
+import { Consumed, formatDateTime } from '../../models';
 import LinkAdapter from '../link-adapter';
 
 interface Props {
@@ -39,7 +39,7 @@ class List extends React.Component<Props, {}> {
             <TableRow key={consumed.id}>
               <TableCell component="th" scope="row">{consumed.product.name}</TableCell>
               <TableCell align="right">{consumed.weight}</TableCell>
-              <TableCell>{consumed.date.toISOString()}</TableCell>
+              <TableCell>{formatDateTime(consumed.date)}</TableCell>
 
               <TableCell className="list-actions">
                 <Button className="button"

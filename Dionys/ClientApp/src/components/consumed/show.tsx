@@ -5,7 +5,7 @@ import {
   TableRow,
   TableCell,
 } from '@material-ui/core';
-import { Consumed } from '../../models';
+import { Consumed, formatDateTime } from '../../models';
 
 interface Props {
   consumed: Consumed;
@@ -31,7 +31,7 @@ const Show = ({ consumed }: Props) => {
 
         <TableRow>
           <TableCell component="th" scope="row">Date</TableCell>
-          <TableCell>{consumed.date.toISOString()}</TableCell>
+          <TableCell>{formatDateTime(consumed.date)}</TableCell>
         </TableRow>
       </TableBody>
     </Table>

@@ -31,7 +31,7 @@ export class ApiConsumedService extends ApiCrudService<ConsumedData, Consumed>
         calories: +data.product.calories,
       },
       weight: +data.weight,
-      date: new Date(data.timestamp),
+      date: new Date(data.timestamp + 'Z'),
     };
   }
 
