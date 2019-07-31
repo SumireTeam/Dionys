@@ -67,6 +67,9 @@ namespace Dionys.Controllers
 
             try
             {
+                _context.ConsumedProducts.Update(consumedProduct);
+                _context.MarkAsModified(consumedProduct.Product);
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
