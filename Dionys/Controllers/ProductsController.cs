@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Dionys.Infrastructure.Extensions;
 using Dionys.Infrastructure.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +31,7 @@ namespace Dionys.Controllers
         [HttpGet]
         public IQueryable<ProductViewModel> GetProducts()
         {
-            var products = from p in _context.Products where !p.IsDeleted select _mapper.Map<ProductViewModel>(p);
+            var products = from p in _context.Products where !p.IsDeleted() select _mapper.Map<ProductViewModel>(p);
 
             return products;
         }
@@ -52,7 +53,7 @@ namespace Dionys.Controllers
         {
             var product = await _context.Products.FindAsync(id);
 
-            if (product == null || product.IsDeleted)
+            if (product == null || product.IsDeleted())
             {
                 return NotFound();
             }
@@ -74,7 +75,7 @@ namespace Dionys.Controllers
 
             // Is deleted?
             var originalProduct = _context.Products.Find(productViewModel);
-            if (originalProduct.Id != productViewModel.Id || originalProduct.IsDeleted)
+            if (originalProduct.Id != productViewModel.Id || originalProduct.IsDeleted())
             {
                 return NotFound();
             }
@@ -120,12 +121,12 @@ namespace Dionys.Controllers
         public async Task<ActionResult<ProductViewModel>> DeleteProduct(Guid id)
         {
             var product = await _context.Products.FindAsync(id);
-            if (product == null || product.IsDeleted)
+            if (product == null || product.IsDeleted())
             {
                 return NotFound();
             }
 
-            product.IsDeleted = true;
+            product.SetDeleted();
 
             await _context.SaveChangesAsync();
 
