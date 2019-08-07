@@ -4,9 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Dionys.Infrastructure.Models;
+using Dionys.Infrastructure.Models.DTO;
+using Dionys.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Dionys.Models.DTO;
+using Dionys.Models.ViewModels;
 
 namespace Dionys.Controllers
 {
@@ -18,36 +21,53 @@ namespace Dionys.Controllers
 
         private readonly IMapper _mapper;
 
-        public ConsumedProductsController(DionysContext context, IMapper mapper)
+        private readonly IConsumedProductService _consumedProductService;
+
+        public ConsumedProductsController(DionysContext context, IMapper mapper, IConsumedProductService consumedProductService)
         {
             _context = context;
             _mapper  = mapper;
+            _consumedProductService = consumedProductService;
         }
 
         // GET: api/ConsumedProducts
         [HttpGet]
-        public IEnumerable<ConsumedProductResponseViewModel> GetConsumedProducts()
+        public PagingViewModel<ConsumedProductResponseViewModel> GetConsumedProducts()
         {
-            var consumedProductDtos = from consumedProduct in _context.ConsumedProducts.Include(x => x.Product)
-                                select _mapper.Map<ConsumedProductResponseViewModel>(consumedProduct);
+            var consumedProductDtos = _context.ConsumedProducts.Include(x => x.Product)
+                .Select(x => _mapper.Map<ConsumedProductResponseViewModel>(x));
 
-            return consumedProductDtos;
+            return new PagingViewModel<ConsumedProductResponseViewModel>()
+            {
+                Elements = consumedProductDtos.Count(),
+                Items    = consumedProductDtos
+            };
+        }
+
+        // GET: api/ConsumedProducts/?page={page}&count={count}
+        public PagingViewModel<ConsumedProductResponseViewModel> GetConsumedProducts(int page, int count)
+        {
+            var consumedProductDtos = _context.ConsumedProducts.OrderBy(x => x.Timestamp)
+                .Include(x => x.Product)
+                .Select(x => _mapper.Map<ConsumedProductResponseViewModel>(x)).Skip(page * count).Take(count);
+
+            return new PagingViewModel<ConsumedProductResponseViewModel>
+            {
+                Elements = consumedProductDtos.Count(),
+                Items    = consumedProductDtos
+            };
         }
 
         // GET: api/ConsumedProducts/5
         [HttpGet("{id}")]
         public ActionResult<ConsumedProductResponseViewModel> GetConsumedProduct(Guid id)
         {
-            var consumedProduct = _context.ConsumedProducts.Find(id);
+            ConsumedProductDTO consumedProduct = _consumedProductService.GetById(id);
 
             if (consumedProduct == null)
             {
                 return NotFound();
             }
-
-            _context.Entry(consumedProduct)
-                .Reference(x => x.Product)
-                .Load();
 
             return _mapper.Map<ConsumedProductResponseViewModel>(consumedProduct);
         }

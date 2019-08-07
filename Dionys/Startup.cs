@@ -1,6 +1,7 @@
 using System.Text;
 using AutoMapper;
 using Dionys.Infrastructure.Models;
+using Dionys.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -74,6 +75,8 @@ namespace Dionys
             services.AddTransient<MappingScenario>();
             services.AddTransient<NestedMappingScenario>();
             services.AddTransient<IDionysContext, DionysContext>();
+            services.AddTransient<IConsumedProductService, ConsumedProductService>();
+
 
             var sp = services.BuildServiceProvider();
 

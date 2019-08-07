@@ -1,8 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Dionys.Infrastructure.Extensions;
 using Dionys.Infrastructure.Models;
 using Dionys.Infrastructure.Models.DTO;
+using Dionys.Infrastructure.Services.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dionys.Infrastructure.Services
 {
@@ -63,6 +67,34 @@ namespace Dionys.Infrastructure.Services
             _context.SaveChanges();
         }
 
+        public ConsumedProductDTO GetById(Guid id, bool includeCopmlexEntities = true)
+        {
+            ConsumedProduct consumedProduct = _context.ConsumedProducts.First(x => x.Id == id);
+
+            if (includeCopmlexEntities)
+            {
+                // HACK: Load ref entity
+                ((DbContext)_context).Entry(consumedProduct).Reference(x => x.Product).Load();
+            }
+
+            if (consumedProduct.IsNew())
+                throw new NotFoundEntityServiceException($"Cannot find {consumedProduct.GetType()} entity by id: ${id}");
+
+            return _mapper.Map<ConsumedProductDTO>(consumedProduct);
+        }
+
+        public IEnumerable<ConsumedProductDTO> GetAll(bool includeCopmlexEntities = true)
+        {
+            var consumedProducts = _context.ConsumedProducts;
+            return consumedProducts.Select(x => _mapper.Map<ConsumedProductDTO>(x));
+        }
+
+        public IEnumerable<ConsumedProductDTO> SearchByName(string searchPattern)
+        {
+            throw new NotImplementedException();
+        }
+
+
         public ProductDTO GetAssociatedProductDTO(ConsumedProductDTO consumedProductDto)
         {
             ConsumedProduct consumedProduct = _context.ConsumedProducts.Find(consumedProductDto.Id);
@@ -73,12 +105,9 @@ namespace Dionys.Infrastructure.Services
 
         private void Validate(ConsumedProductDTO consumedProductDto)
         {
-            bool isProductValid = _context.Products.Any(x => x.IsDeleted == false && consumedProductDto.Id == x.Id);
+            bool isProductValid = _context.Products.Any(x => !x.IsDeleted() && consumedProductDto.Id == x.Id);
 
-            if (!isProductValid)
-            {
-                throw new Exception("Invalid Product. Is product deleted?");
-            }
+            if (!isProductValid) throw new Exception("Invalid Product. Is product deleted?");
         }
     }
 
@@ -88,5 +117,10 @@ namespace Dionys.Infrastructure.Services
         void Create(ConsumedProductDTO consumedProductDto);
         void Update(ConsumedProductDTO consumedProductDto, bool ignoreValidator = false);
         void Delete(ConsumedProductDTO consumedProductDto, bool ignoreValidator = false);
+        ConsumedProductDTO GetById(Guid id, bool includeCopmlexEntities = true);
+        IEnumerable<ConsumedProductDTO> GetAll(bool includeCopmlexEntities = true);
+
+        IEnumerable<ConsumedProductDTO> SearchByName(string searchPa);
+
     }
 }
