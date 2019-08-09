@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Dionys.Models;
 using Dionys.Models.DTO;
+using Dionys.Models.ViewModels;
 
 namespace Dionys.Controllers
 {
@@ -29,11 +31,25 @@ namespace Dionys.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public IQueryable<ProductViewModel> GetProducts()
+        
+        public PagingViewModel<ProductViewModel> GetProducts([FromQuery] PagingParameterModel pagingModel)
         {
-            var products = from p in _context.Products where !p.IsDeleted() select _mapper.Map<ProductViewModel>(p);
+            if (pagingModel.Validate())
+            {
+                var products = _context.Products.Where(x => !x.IsDeleted())
+                    .Skip(pagingModel.Page * pagingModel.ElementsPerPage)
+                    .Take(pagingModel.ElementsPerPage)
+                    .Select(x => _mapper.Map<ProductViewModel>(x));
 
-            return products;
+                return new PagingViewModel<ProductViewModel> { Elements = products.Count(), Items = products };
+            }
+            else
+            {
+                var products = _context.Products.Where(x => !x.IsDeleted())
+                    .Select(x => _mapper.Map<ProductViewModel>(x));
+
+                return new PagingViewModel<ProductViewModel> { Elements = products.Count(), Items = products };
+            }
         }
 
         // GET: api/Products/name/{name}

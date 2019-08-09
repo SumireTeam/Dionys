@@ -2,12 +2,12 @@ namespace Dionys.Models.ViewModels
 {
     public class PagingParameterModel
     {
-        public int PageNumber      { get; set; } = 1;
-        public int ElementsPerPage { get; set; } = 10;
+        public int Page { get; set; } = 0;
+        public int ElementsPerPage { get; set; }
 
         public bool Validate()
         {
-            return PageNumber >= 0 && ElementsPerPage > 0;
+            return Page >= 0 && ElementsPerPage >= 0;
         }
     }
 }
