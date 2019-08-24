@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as MuiLink } from '@material-ui/core';
 import { Layout, Link } from '../components';
 
 const Home = () => {
@@ -7,8 +8,7 @@ const Home = () => {
       <ul>
         <li><Link to="/products">Products</Link></li>
         <li><Link to="/consumed">Consumed products</Link></li>
-        <li><a className="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
-          href="/swagger/index.html" target="_blank">Swagger</a></li>
+        <li><MuiLink href="/swagger/index.html" target="_blank">Swagger</MuiLink></li>
       </ul>
     </Layout>
   );
