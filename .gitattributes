@@ -62,4 +62,4 @@
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
 
-Dionys/ClientApp/* linguist-vendored
+Dionys.Web/ClientApp/* linguist-vendored
