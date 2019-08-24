@@ -15,7 +15,7 @@ namespace Dionys.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ConsumedProductsController : ControllerBase
+    public class ConsumedProductsController : Controller
     {
         private readonly DionysContext _context;
 

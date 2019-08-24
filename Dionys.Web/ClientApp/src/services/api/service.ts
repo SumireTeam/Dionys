@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-unfetch';
-import { config } from '../../config';
 import { CrudService, Identity } from '../service';
 import { Paging } from '../../models/paging';
 
@@ -26,7 +25,7 @@ export function request(method: string, endpoint: string, data: object = null) {
     credentials: 'same-origin',
   };
 
-  const url = `${config.api.baseURL}/api/${endpoint}`;
+  const url = `api/${endpoint}`;
   return fetch(url, options);
 }
 

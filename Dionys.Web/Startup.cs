@@ -35,14 +35,6 @@ namespace Dionys.Web
                 configuration.RootPath = "ClientApp/build";
             });
 
-            // CORS
-            services.AddCors(options =>
-            {
-                options.AddPolicy("EnableCORS", builder =>
-                {
-                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials().Build();
-                });
-            });
 
             services.AddDbContext<DionysContext>(options => options.UseNpgsql(
                 Configuration.GetConnectionString("DefaultConnection")
@@ -82,15 +74,6 @@ namespace Dionys.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
-            //else
-            //{
-            //    app.UseExceptionHandler("/Error");
-            //}
-
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -99,7 +82,6 @@ namespace Dionys.Web
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-            app.UseCors("EnableCORS");
 
             app.UseMvc(routes =>
             {
@@ -113,9 +95,7 @@ namespace Dionys.Web
                 spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())
-                {
                     spa.UseReactDevelopmentServer(npmScript: "start");
-                }
             });
         }
     }

@@ -13,7 +13,7 @@ namespace Dionys.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : Controller
     {
         // DTO to Database Entity mapper
         private readonly IMapper _mapper;
