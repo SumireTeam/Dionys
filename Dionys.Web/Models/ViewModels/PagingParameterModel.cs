@@ -3,7 +3,7 @@ namespace Dionys.Web.Models.ViewModels
     public class PagingParameterModel
     {
         public int Page { get; set; } = 0;
-        public int ElementsPerPage { get; set; }
+        public int ElementsPerPage { get; set; } = 300;
 
         public bool Validate()
         {

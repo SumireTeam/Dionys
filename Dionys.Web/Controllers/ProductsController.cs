@@ -24,30 +24,20 @@ namespace Dionys.Web.Controllers
         public ProductsController(IDionysContext context, IMapper mapper)
         {
             _context = context;
-            _mapper  = mapper;
+            _mapper = mapper;
         }
 
         // GET: api/Products
         [HttpGet]
-        
+
         public PagingViewModel<ProductViewModel> GetProducts([FromQuery] PagingParameterModel pagingModel)
         {
-            if (pagingModel.Validate())
-            {
-                var products = _context.Products.Where(x => !x.IsDeleted())
-                    .Skip(pagingModel.Page * pagingModel.ElementsPerPage)
-                    .Take(pagingModel.ElementsPerPage)
-                    .Select(x => _mapper.Map<ProductViewModel>(x));
+            var products = _context.Products.Where(x => !x.IsDeleted())
+                .Skip(pagingModel.Page * pagingModel.ElementsPerPage)
+                .Take(pagingModel.ElementsPerPage)
+                .Select(x => _mapper.Map<ProductViewModel>(x));
 
-                return new PagingViewModel<ProductViewModel> { Elements = products.Count(), Items = products };
-            }
-            else
-            {
-                var products = _context.Products.Where(x => !x.IsDeleted())
-                    .Select(x => _mapper.Map<ProductViewModel>(x));
-
-                return new PagingViewModel<ProductViewModel> { Elements = products.Count(), Items = products };
-            }
+            return new PagingViewModel<ProductViewModel> { Elements = products.Count(), Items = products };
         }
 
         // GET: api/Products/name/{name}
@@ -55,8 +45,8 @@ namespace Dionys.Web.Controllers
         public IQueryable<ProductViewModel> GetProductsSearch(string name)
         {
             var products = from p in _context.Products
-                where EF.Functions.Like(p.Name, name)
-                select _mapper.Map<ProductViewModel>(p);
+                           where EF.Functions.Like(p.Name, name)
+                           select _mapper.Map<ProductViewModel>(p);
 
             return products;
         }
@@ -68,9 +58,7 @@ namespace Dionys.Web.Controllers
             var product = await _context.Products.FindAsync(id);
 
             if (product == null || product.IsDeleted())
-            {
                 return NotFound();
-            }
 
             var dtoProduct = _mapper.Map<ProductViewModel>(product);
             return dtoProduct;
@@ -89,10 +77,9 @@ namespace Dionys.Web.Controllers
 
             // Is deleted?
             var originalProduct = _context.Products.Find(productViewModel);
+
             if (originalProduct.Id != productViewModel.Id || originalProduct.IsDeleted())
-            {
                 return NotFound();
-            }
 
             _context.MarkAsModified(product);
 
@@ -103,10 +90,7 @@ namespace Dionys.Web.Controllers
             catch (DbUpdateConcurrencyException)
             {
                 if (!ProductExists(id))
-                {
                     return NotFound();
-                }
-
                 throw;
             }
 

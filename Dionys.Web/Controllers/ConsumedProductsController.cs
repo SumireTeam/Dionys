@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -29,21 +30,9 @@ namespace Dionys.Web.Controllers
             _consumedProductService = consumedProductService;
         }
 
-        // GET: api/ConsumedProducts
-        [HttpGet]
-        public PagingViewModel<ConsumedProductResponseViewModel> GetConsumedProducts()
-        {
-            var consumedProductDtos = _context.ConsumedProducts.Include(x => x.Product)
-                .Select(x => _mapper.Map<ConsumedProductResponseViewModel>(x));
-
-            return new PagingViewModel<ConsumedProductResponseViewModel>()
-            {
-                Elements = consumedProductDtos.Count(),
-                Items    = consumedProductDtos
-            };
-        }
-
         // GET: api/ConsumedProducts/?page={page}&count={count}
+        [DisplayName("ConsumedProductsList")]
+        [HttpGet]
         public PagingViewModel<ConsumedProductResponseViewModel> GetConsumedProducts(int page, int count)
         {
             var consumedProductDtos = _context.ConsumedProducts.OrderBy(x => x.Timestamp)
@@ -94,13 +83,8 @@ namespace Dionys.Web.Controllers
             catch (DbUpdateConcurrencyException)
             {
                 if (!ConsumedProductExists(id))
-                {
                     return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();

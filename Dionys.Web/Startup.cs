@@ -91,6 +91,12 @@ namespace Dionys.Web
             //    app.UseExceptionHandler("/Error");
             //}
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dionys API indev");
+            });
+
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseCors("EnableCORS");
@@ -100,12 +106,6 @@ namespace Dionys.Web
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
-            });
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dionys API indev");
             });
 
             app.UseSpa(spa =>

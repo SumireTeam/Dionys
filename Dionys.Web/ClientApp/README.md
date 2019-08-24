@@ -1,3 +1,5 @@
+# Dionys Forontend
+
 ## Installation
 
 Copy `config.example.ts` to the `config.ts`.
@@ -5,7 +7,7 @@ Copy `config.example.ts` to the `config.ts`.
 Install dependencies:
 
 ```sh
-npm install
+npm i
 ```
 
 ## Development

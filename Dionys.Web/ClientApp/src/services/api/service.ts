@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-unfetch';
 import { config } from '../../config';
 import { CrudService, Identity } from '../service';
+import { Paging } from '../../models/paging';
 
 export class ApiServiceError extends Error {
   public readonly response: Response;
@@ -49,7 +50,8 @@ export abstract class ApiCrudService<TData extends Identity, TModel extends Iden
       throw new ApiServiceError(response);
     }
 
-    const items = await response.json() as TData[];
+    const paging = await response.json() as Paging;
+    const items = paging.items;
     return items.map(this.mapToModel);
   }
 
