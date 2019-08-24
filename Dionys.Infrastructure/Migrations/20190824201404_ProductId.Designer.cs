@@ -3,15 +3,17 @@ using System;
 using Dionys.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Dionys.Infrastructure.Migrations
 {
     [DbContext(typeof(DionysContext))]
-    partial class DionysContextModelSnapshot : ModelSnapshot
+    [Migration("20190824201404_ProductId")]
+    partial class ProductId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

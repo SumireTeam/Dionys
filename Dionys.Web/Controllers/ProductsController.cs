@@ -41,10 +41,10 @@ namespace Dionys.Web.Controllers
         }
 
         // GET: api/Products/name/{name}
-        [HttpGet("search/{name}")]
-        public IQueryable<ProductViewModel> GetProductsSearch(string name)
+        [HttpGet("search/")]
+        public IQueryable<ProductViewModel> GetProductsSearch(string q)
         {
-            var products = _context.Products.Where(p => EF.Functions.Like(p.Name, name))
+            var products = _context.Products.Where(p => EF.Functions.Like(p.Name, q))
                 .Select(p => _mapper.Map<ProductViewModel>(p));
 
             return products;

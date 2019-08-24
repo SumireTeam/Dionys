@@ -4,123 +4,143 @@ using System.Linq;
 using AutoMapper;
 using Dionys.Infrastructure.Extensions;
 using Dionys.Infrastructure.Models;
-using Dionys.Infrastructure.Models.DTO;
 using Dionys.Infrastructure.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Dionys.Infrastructure.Services
 {
+    public interface IConsumedProductService
+    {
+        Product GetAssociatedProduct(ConsumedProduct consumedProductDto);
+        bool Create(ConsumedProduct consumedProduct);
+        bool Update(ConsumedProduct consumedProduct, bool ignoreValidator = false);
+        bool Delete(ConsumedProduct consumedProduct, bool ignoreValidator = false);
+        ConsumedProduct GetById(Guid id, bool includeCopmlexEntities = true);
+        IEnumerable<ConsumedProduct> GetAll(bool includeCopmlexEntities = true);
+        IEnumerable<ConsumedProduct> SearchByName(string searchPa);
+        bool IsExists(Guid id);
+    }
+
     public class ConsumedProductService : IService, IConsumedProductService
     {
-        private readonly IDionysContext _context;
-        private readonly IMapper        _mapper ;
+        private readonly DionysContext _context;
 
-        public ConsumedProductService(IDionysContext context, IMapper mapper)
+        public ConsumedProductService(DionysContext context)
         {
             _context = context;
-            _mapper  = mapper;
         }
 
-        public void Create(ConsumedProductDTO consumedProductDto)
+        public bool Create(ConsumedProduct consumedProduct)
         {
-            Validate(consumedProductDto);
+            if (!Validate(consumedProduct))
+                return false;
 
             // Find assoc product
-            Product product = _context.Products.Find(consumedProductDto.ProductId);
-
-            ConsumedProduct consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductDto);
+            var product = _context.Products.Find(consumedProduct.Product.Id);
 
             consumedProduct.Product = product;
             _context.ConsumedProducts.Add(consumedProduct);
 
-            _context.SaveChanges();
+            try
+            {
+                _context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public void Update(ConsumedProductDTO consumedProductDto, bool ignoreValidator = false)
+        public bool Update(ConsumedProduct consumedProduct, bool ignoreValidator = false)
         {
-            if (!ignoreValidator)
-            {
-                Validate(consumedProductDto);
-            }
-
-            // Find assoc product
-            Product product = _context.Products.Find(consumedProductDto.ProductId);
-            ConsumedProduct consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductDto);
-            consumedProduct.Product = product;
+            if (!ignoreValidator && !Validate(consumedProduct))
+                return false;
 
             // Do not update assoc product (member)
-            _context.MarkAsUnchanged(consumedProduct.Product);
+            consumedProduct.Product = null;
             _context.ConsumedProducts.Update(consumedProduct);
 
-            _context.SaveChanges();
-        }
-
-        public void Delete(ConsumedProductDTO consumedProductDto, bool ignoreValidator = false)
-        {
-            if (!ignoreValidator)
+            try
             {
-                Validate(consumedProductDto);
+                _context.SaveChanges();
+                return true;
             }
-
-            ConsumedProduct consumedProduct = _context.ConsumedProducts.Find(consumedProductDto.Id);
-            _context.ConsumedProducts.Remove(consumedProduct);
-            _context.SaveChanges();
+            catch
+            {
+                return false;
+            }
         }
 
-        public ConsumedProductDTO GetById(Guid id, bool includeCopmlexEntities = true)
+        public bool Delete(ConsumedProduct consumedProduct, bool ignoreValidator = false)
         {
-            ConsumedProduct consumedProduct = _context.ConsumedProducts.First(x => x.Id == id);
+            if (!ignoreValidator && !Validate(consumedProduct))
+                return false;
+
+            _context.ConsumedProducts.Remove(consumedProduct);
+
+            try
+            {
+                _context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public ConsumedProduct GetById(Guid id, bool includeCopmlexEntities = true)
+        {
+            var consumedProduct = _context.ConsumedProducts.FirstOr(x => x.Id == id, new ConsumedProduct());
 
             if (includeCopmlexEntities)
-            {
-                // HACK: Load ref entity
-                ((DbContext)_context).Entry(consumedProduct).Reference(x => x.Product).Load();
-            }
+                _context.Entry(consumedProduct).Reference(x => x.Product).Load();
 
             if (consumedProduct.IsNew())
                 throw new NotFoundEntityServiceException($"Cannot find {consumedProduct.GetType()} entity by id: ${id}");
 
-            return _mapper.Map<ConsumedProductDTO>(consumedProduct);
+            return consumedProduct;
         }
 
-        public IEnumerable<ConsumedProductDTO> GetAll(bool includeCopmlexEntities = true)
+        public IEnumerable<ConsumedProduct> GetAll(bool includeCopmlexEntities = true)
         {
-            var consumedProducts = _context.ConsumedProducts;
-            return consumedProducts.Select(x => _mapper.Map<ConsumedProductDTO>(x));
+            var consumedProductList = _context.ConsumedProducts;
+
+            if (includeCopmlexEntities)
+                return consumedProductList.Include(e => e.Product);
+            return consumedProductList;
         }
 
-        public IEnumerable<ConsumedProductDTO> SearchByName(string searchPattern)
+        public IEnumerable<ConsumedProduct> SearchByName(string searchPattern)
         {
             throw new NotImplementedException();
         }
 
-
-        public ProductDTO GetAssociatedProductDTO(ConsumedProductDTO consumedProductDto)
+        public bool IsExists(Guid id)
         {
-            ConsumedProduct consumedProduct = _context.ConsumedProducts.Find(consumedProductDto.Id);
-            Product product = _context.ConsumedProducts.Find(consumedProduct.Id).Product;
-
-            return _mapper.Map<ProductDTO>(product);
+            return _context.ConsumedProducts.Any(cp => cp.Id == id);
         }
 
-        private void Validate(ConsumedProductDTO consumedProductDto)
+
+        public Product GetAssociatedProduct(ConsumedProduct consumedProduct)
         {
-            bool isProductValid = _context.Products.Any(x => !x.IsDeleted() && consumedProductDto.Id == x.Id);
-
-            if (!isProductValid) throw new Exception("Invalid Product. Is product deleted?");
+            return _context.ConsumedProducts.Find(consumedProduct.Id).Product;
         }
-    }
 
-    public interface IConsumedProductService
-    {
-        ProductDTO GetAssociatedProductDTO(ConsumedProductDTO consumedProductDto);
-        void Create(ConsumedProductDTO consumedProductDto);
-        void Update(ConsumedProductDTO consumedProductDto, bool ignoreValidator = false);
-        void Delete(ConsumedProductDTO consumedProductDto, bool ignoreValidator = false);
-        ConsumedProductDTO GetById(Guid id, bool includeCopmlexEntities = true);
-        IEnumerable<ConsumedProductDTO> GetAll(bool includeCopmlexEntities = true);
+        public IEnumerable<ConsumedProduct> GetAllProduct()
+        {
+            var consumedProductDtos = _context.ConsumedProducts.OrderBy(x => x.Timestamp)
+                .Include(x => x.Product)
+                .OrderBy(cp => cp.Id);
 
-        IEnumerable<ConsumedProductDTO> SearchByName(string searchPa);
+            return consumedProductDtos;
+        }
 
+        private bool Validate(ConsumedProduct consumedProduct)
+        {
+            return _context.Products.Any(x => !x.IsDeleted() && consumedProduct.ProductId == x.Id);
+        }
     }
 }

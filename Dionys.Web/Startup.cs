@@ -36,8 +36,10 @@ namespace Dionys.Web
             });
 
 
-            services.AddDbContext<DionysContext>(options => options.UseNpgsql(
-                Configuration.GetConnectionString("DefaultConnection")
+            services.AddDbContext<DionysContext>(options =>
+                options.UseNpgsql(
+                    Configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly("Dionys.Infrastructure")
                 )
             );
 

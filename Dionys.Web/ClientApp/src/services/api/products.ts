@@ -44,7 +44,7 @@ export class ApiProductService extends ApiCrudService<ProductData, Product>
 
   public async search(name: string): Promise<Product[]> {
     name = name.replace(/[%_]/g, '');
-    const response = await request('get', `products/search/%${name}%`);
+    const response = await request('get', `products/search/?q=%${name}%`);
     if (response.status !== 200) {
       throw new ApiServiceError(response);
     }

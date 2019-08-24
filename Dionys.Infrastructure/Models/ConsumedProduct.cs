@@ -15,6 +15,11 @@ namespace Dionys.Infrastructure.Models
         public Product Product { get; set; }
 
         /// <summary>
+        /// Consumed product id. For lazy load bypass.
+        /// </summary>
+        public Guid ProductId { get; set; }
+
+        /// <summary>
         /// Consumed product weight
         /// </summary>
         public float Weight { get; set; }

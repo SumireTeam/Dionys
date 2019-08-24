@@ -1,15 +1,12 @@
 using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Dionys.Infrastructure.Models;
-using Dionys.Infrastructure.Models.DTO;
 using Dionys.Infrastructure.Services;
 using Dionys.Web.Models.DTO;
 using Dionys.Web.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Dionys.Web.Controllers
 {
@@ -17,15 +14,11 @@ namespace Dionys.Web.Controllers
     [ApiController]
     public class ConsumedProductsController : Controller
     {
-        private readonly DionysContext _context;
-
         private readonly IMapper _mapper;
-
         private readonly IConsumedProductService _consumedProductService;
 
-        public ConsumedProductsController(DionysContext context, IMapper mapper, IConsumedProductService consumedProductService)
+        public ConsumedProductsController(IMapper mapper, IConsumedProductService consumedProductService)
         {
-            _context = context;
             _mapper = mapper;
             _consumedProductService = consumedProductService;
         }
@@ -33,17 +26,15 @@ namespace Dionys.Web.Controllers
         // GET: api/ConsumedProducts/?page={page}&count={count}
         [DisplayName("ConsumedProductsList")]
         [HttpGet]
-        public PagingViewModel<ConsumedProductResponseViewModel> GetConsumedProducts(int page, int count)
+        public PagingViewModel<ConsumedProductResponseViewModel> GetConsumedProducts([FromQuery] PagingParameterModel paging)
         {
-            var consumedProductDtos = _context.ConsumedProducts.OrderBy(x => x.Timestamp)
-                .Include(x => x.Product)
-                .OrderBy(cp => cp.Id)
+            var consumedProductDtos = _consumedProductService.GetAll()
                 .Select(x => _mapper.Map<ConsumedProductResponseViewModel>(x))
-                .Skip(page * count).Take(count);
+                .Skip(paging.Page * paging.ElementsPerPage).Take(paging.ElementsPerPage).ToList();
 
             return new PagingViewModel<ConsumedProductResponseViewModel>
             {
-                Elements = consumedProductDtos.Count(),
+                Elements = consumedProductDtos.Count,
                 Items = consumedProductDtos
             };
         }
@@ -62,68 +53,39 @@ namespace Dionys.Web.Controllers
 
         // PUT: api/ConsumedProducts/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutConsumedProduct(Guid id, ConsumedProductRequestViewModel consumedProductRequestViewModel)
+        public IActionResult PutConsumedProduct(Guid id, ConsumedProductRequestViewModel consumedProductRequestViewModel)
         {
             if (id != consumedProductRequestViewModel.Id)
                 return BadRequest();
 
             var consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductRequestViewModel);
 
-            _context.MarkAsModified(consumedProduct);
+            var updateStatusResult = _consumedProductService.Update(consumedProduct);
 
-            try
-            {
-                _context.ConsumedProducts.Update(consumedProduct);
-                _context.MarkAsModified(consumedProduct.Product);
-
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ConsumedProductExists(id))
-                    return NotFound();
-                throw;
-            }
+            if (!updateStatusResult)
+                return NotFound();
 
             return NoContent();
         }
 
         // POST: api/ConsumedProducts
         [HttpPost]
-        public async Task<ActionResult<ConsumedProductResponseViewModel>> PostConsumedProduct(ConsumedProductRequestViewModel consumedProductReqestViewModel)
+        public ActionResult<ConsumedProductResponseViewModel> PostConsumedProduct(ConsumedProductRequestViewModel consumedProductReqestViewModel)
         {
             var consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductReqestViewModel);
+            _consumedProductService.Create(consumedProduct);
 
-            // HACK: EF trying to insert new entity Product
-            var product = _context.Products.Find(consumedProductReqestViewModel.ProductId);
-            consumedProduct.Product = product;
-
-            _context.ConsumedProducts.Add(consumedProduct);
-            await _context.SaveChangesAsync();
-
-            var consumedProductResponseDTO = _mapper.Map<ConsumedProductResponseViewModel>(consumedProduct);
-
-            return CreatedAtAction("GetConsumedProduct", new { id = consumedProductResponseDTO.Id }, consumedProductResponseDTO);
+            return CreatedAtAction("GetConsumedProduct", new { id = consumedProduct.Id }, consumedProduct);
         }
 
         // DELETE: api/ConsumedProducts/5
         [HttpDelete("{id}")]
         public ActionResult<ConsumedProductRequestViewModel> DeleteConsumedProduct(Guid id)
         {
-            var consumedProduct = _context.ConsumedProducts.Find(id);
+            var consuledProduct = _consumedProductService.GetById(id);
+            _consumedProductService.Delete(consuledProduct);
 
-            if (consumedProduct == null)
-                return NotFound();
-
-            _context.ConsumedProducts.Remove(consumedProduct);
-            _context.SaveChanges();
-
-            return _mapper.Map<ConsumedProductRequestViewModel>(consumedProduct);
-        }
-
-        private bool ConsumedProductExists(Guid id)
-        {
-            return _context.ConsumedProducts.Any(e => e.Id == id);
+            return _mapper.Map<ConsumedProductRequestViewModel>(consuledProduct);
         }
     }
 }
