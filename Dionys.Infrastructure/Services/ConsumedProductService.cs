@@ -75,8 +75,8 @@ namespace Dionys.Infrastructure.Services
 
         public bool Delete(ConsumedProduct consumedProduct, bool ignoreValidator = false)
         {
-            if (!ignoreValidator && !Validate(consumedProduct))
-                return false;
+            //if (!ignoreValidator && !Validate(consumedProduct))
+            //    return false;
 
             _context.ConsumedProducts.Remove(consumedProduct);
 
