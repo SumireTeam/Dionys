@@ -21,7 +21,7 @@ class Edit extends React.Component<Props, State> {
     this.state = {
       nameTouched: false,
     };
-  };
+  }
 
   public render() {
     if (!this.props.product) {
@@ -57,7 +57,7 @@ class Edit extends React.Component<Props, State> {
           onChange={e => numRegExp.test(e.target.value)
             && onChange({ ...this.props.product, protein: +e.target.value })}
           type="number"
-          inputProps={{ min: "0" }}
+          inputProps={{ min: '0' }}
           fullWidth
           required />
 
@@ -68,7 +68,7 @@ class Edit extends React.Component<Props, State> {
           onChange={e => numRegExp.test(e.target.value)
             && onChange({ ...this.props.product, fat: +e.target.value })}
           type="number"
-          inputProps={{ min: "0" }}
+          inputProps={{ min: '0' }}
           fullWidth
           required />
 
@@ -79,7 +79,7 @@ class Edit extends React.Component<Props, State> {
           onChange={e => numRegExp.test(e.target.value)
             && onChange({ ...this.props.product, carbs: +e.target.value })}
           type="number"
-          inputProps={{ min: "0" }}
+          inputProps={{ min: '0' }}
           fullWidth
           required />
 
@@ -90,7 +90,7 @@ class Edit extends React.Component<Props, State> {
           onChange={e => numRegExp.test(e.target.value)
             && onChange({ ...this.props.product, calories: +e.target.value })}
           type="number"
-          inputProps={{ min: "0" }}
+          inputProps={{ min: '0' }}
           fullWidth
           required />
 

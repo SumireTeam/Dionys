@@ -71,7 +71,7 @@ class Edit extends React.Component<Props, State> {
           onChange={e => numRegExp.test(e.target.value)
             && onChange({ ...this.props.consumed, weight: +e.target.value })}
           type="number"
-          inputProps={{ min: "0" }}
+          inputProps={{ min: '0' }}
           fullWidth
           required />
 
