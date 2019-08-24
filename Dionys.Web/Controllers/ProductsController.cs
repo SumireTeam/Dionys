@@ -44,9 +44,8 @@ namespace Dionys.Web.Controllers
         [HttpGet("search/{name}")]
         public IQueryable<ProductViewModel> GetProductsSearch(string name)
         {
-            var products = from p in _context.Products
-                           where EF.Functions.Like(p.Name, name)
-                           select _mapper.Map<ProductViewModel>(p);
+            var products = _context.Products.Where(p => EF.Functions.Like(p.Name, name))
+                .Select(p => _mapper.Map<ProductViewModel>(p));
 
             return products;
         }
@@ -69,9 +68,7 @@ namespace Dionys.Web.Controllers
         public async Task<IActionResult> PutProduct(Guid id, ProductViewModel productViewModel)
         {
             if (id != productViewModel.Id)
-            {
                 return BadRequest();
-            }
 
             var product = _mapper.Map<Product>(productViewModel);
 
@@ -119,10 +116,9 @@ namespace Dionys.Web.Controllers
         public async Task<ActionResult<ProductViewModel>> DeleteProduct(Guid id)
         {
             var product = await _context.Products.FindAsync(id);
+
             if (product == null || product.IsDeleted())
-            {
                 return NotFound();
-            }
 
             product.SetDeleted();
 

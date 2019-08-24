@@ -26,7 +26,7 @@ namespace Dionys.Web.Controllers
         public ConsumedProductsController(DionysContext context, IMapper mapper, IConsumedProductService consumedProductService)
         {
             _context = context;
-            _mapper  = mapper;
+            _mapper = mapper;
             _consumedProductService = consumedProductService;
         }
 
@@ -37,12 +37,14 @@ namespace Dionys.Web.Controllers
         {
             var consumedProductDtos = _context.ConsumedProducts.OrderBy(x => x.Timestamp)
                 .Include(x => x.Product)
-                .Select(x => _mapper.Map<ConsumedProductResponseViewModel>(x)).Skip(page * count).Take(count);
+                .OrderBy(cp => cp.Id)
+                .Select(x => _mapper.Map<ConsumedProductResponseViewModel>(x))
+                .Skip(page * count).Take(count);
 
             return new PagingViewModel<ConsumedProductResponseViewModel>
             {
                 Elements = consumedProductDtos.Count(),
-                Items    = consumedProductDtos
+                Items = consumedProductDtos
             };
         }
 
@@ -50,12 +52,10 @@ namespace Dionys.Web.Controllers
         [HttpGet("{id}")]
         public ActionResult<ConsumedProductResponseViewModel> GetConsumedProduct(Guid id)
         {
-            ConsumedProductDTO consumedProduct = _consumedProductService.GetById(id);
+            var consumedProduct = _consumedProductService.GetById(id);
 
             if (consumedProduct == null)
-            {
                 return NotFound();
-            }
 
             return _mapper.Map<ConsumedProductResponseViewModel>(consumedProduct);
         }
@@ -65,9 +65,7 @@ namespace Dionys.Web.Controllers
         public async Task<IActionResult> PutConsumedProduct(Guid id, ConsumedProductRequestViewModel consumedProductRequestViewModel)
         {
             if (id != consumedProductRequestViewModel.Id)
-            {
                 return BadRequest();
-            }
 
             var consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductRequestViewModel);
 
@@ -94,10 +92,10 @@ namespace Dionys.Web.Controllers
         [HttpPost]
         public async Task<ActionResult<ConsumedProductResponseViewModel>> PostConsumedProduct(ConsumedProductRequestViewModel consumedProductReqestViewModel)
         {
-            ConsumedProduct consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductReqestViewModel);
+            var consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductReqestViewModel);
 
             // HACK: EF trying to insert new entity Product
-            Product product = _context.Products.Find(consumedProductReqestViewModel.ProductId);
+            var product = _context.Products.Find(consumedProductReqestViewModel.ProductId);
             consumedProduct.Product = product;
 
             _context.ConsumedProducts.Add(consumedProduct);
@@ -113,10 +111,9 @@ namespace Dionys.Web.Controllers
         public ActionResult<ConsumedProductRequestViewModel> DeleteConsumedProduct(Guid id)
         {
             var consumedProduct = _context.ConsumedProducts.Find(id);
+
             if (consumedProduct == null)
-            {
                 return NotFound();
-            }
 
             _context.ConsumedProducts.Remove(consumedProduct);
             _context.SaveChanges();
