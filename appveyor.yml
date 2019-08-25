@@ -16,10 +16,8 @@ before_build:
   - cmd: dotnet restore ./Dionys.Infrastructure/Dionys.Infrastructure.csproj --verbosity m
 clone_depth: 1
 test_script:
-  # restore packages for our unit tests
-  - cmd: dotnet restore ./Dionys.Web.Tests/Dionys.Web.Tests.csproj --verbosity m
-  # run the unit tests (requires changing into the test directory)
   - cmd: cd Dionys.Web.Tests
+  - cmd: dotnet restore
   - cmd: dotnet test
 on_finish :
   # any cleanup in here
