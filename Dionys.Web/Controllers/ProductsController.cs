@@ -1,13 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Dionys.Infrastructure.Extensions;
 using Dionys.Infrastructure.Models;
+using Dionys.Infrastructure.Services;
 using Dionys.Web.Models.DTO;
 using Dionys.Web.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Dionys.Web.Controllers
 {
@@ -15,15 +15,12 @@ namespace Dionys.Web.Controllers
     [ApiController]
     public class ProductsController : Controller
     {
-        // DTO to Database Entity mapper
         private readonly IMapper _mapper;
+        private readonly IProductService _productService;
 
-        // Database Context
-        private readonly IDionysContext _context;
-
-        public ProductsController(IDionysContext context, IMapper mapper)
+        public ProductsController(IProductService productService, IMapper mapper)
         {
-            _context = context;
+            _productService = productService;
             _mapper = mapper;
         }
 
@@ -32,104 +29,67 @@ namespace Dionys.Web.Controllers
 
         public PagingViewModel<ProductViewModel> GetProducts([FromQuery] PagingParameterModel pagingModel)
         {
-            var products = _context.Products.Where(x => !x.IsDeleted())
-                .Skip(pagingModel.Page * pagingModel.ElementsPerPage)
+            var products = _productService.GetAll().Skip(pagingModel.Page * pagingModel.ElementsPerPage)
                 .Take(pagingModel.ElementsPerPage)
-                .Select(x => _mapper.Map<ProductViewModel>(x));
+                .Select(x => _mapper.Map<ProductViewModel>(x)).ToList();
 
-            return new PagingViewModel<ProductViewModel> { Elements = products.Count(), Items = products };
+            return new PagingViewModel<ProductViewModel> { Elements = products.Count, Items = products };
         }
 
         // GET: api/Products/name/{name}
         [HttpGet("search/")]
-        public IQueryable<ProductViewModel> GetProductsSearch(string q)
+        public IEnumerable<ProductViewModel> GetProductsSearch(string q)
         {
-            var products = _context.Products.Where(p => EF.Functions.Like(p.Name, q))
-                .Select(p => _mapper.Map<ProductViewModel>(p));
+            var products = _productService.SearchByName(q);
 
-            return products;
+            return products.Select(p => _mapper.Map<ProductViewModel>(p));
         }
 
         // GET: api/Products/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductViewModel>> GetProduct(Guid id)
+        public ActionResult<ProductViewModel> GetProduct(Guid id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = _productService.GetById(id);
 
             if (product == null || product.IsDeleted())
                 return NotFound();
 
-            var dtoProduct = _mapper.Map<ProductViewModel>(product);
-            return dtoProduct;
+            return _mapper.Map<ProductViewModel>(product);
         }
 
         // PUT: api/Products/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(Guid id, ProductViewModel productViewModel)
+        public IActionResult PutProduct(Guid id, ProductViewModel productViewModel)
         {
             if (id != productViewModel.Id)
                 return BadRequest();
 
             var product = _mapper.Map<Product>(productViewModel);
 
-            // Is deleted?
-            var originalProduct = _context.Products.Find(productViewModel);
-
-            if (originalProduct.Id != productViewModel.Id || originalProduct.IsDeleted())
-                return NotFound();
-
-            _context.MarkAsModified(product);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(id))
-                    return NotFound();
-                throw;
-            }
-
+            if(_productService.Update(product))
+                return NoContent();
             return NoContent();
         }
 
         // POST: api/Products
         [HttpPost]
-        public async Task<ActionResult<ProductViewModel>> PostProduct(ProductViewModel productViewModel)
+        public ActionResult<ProductViewModel> PostProduct(ProductViewModel productViewModel)
         {
-            Product product = _mapper.Map<Product>(productViewModel);
+            var product = _mapper.Map<Product>(productViewModel);
 
-            do
-            {
-                product.Id = new Guid();
-            } while (_context.Products.Find(product.Id) != null);
-
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetProduct", new { id = product.Id }, _mapper.Map<ProductViewModel>(product));
+            if(_productService.Create(product))
+                return CreatedAtAction("GetProduct", new { id = product.Id }, _mapper.Map<ProductViewModel>(product));
+            return Redirect("List");
         }
 
         // DELETE: api/Products/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ProductViewModel>> DeleteProduct(Guid id)
+        public ActionResult<ProductViewModel> DeleteProduct(Guid id)
         {
-            var product = await _context.Products.FindAsync(id);
-
-            if (product == null || product.IsDeleted())
-                return NotFound();
-
-            product.SetDeleted();
-
-            await _context.SaveChangesAsync();
+            var product = _productService.GetById(id);
+            _productService.Delete(_productService.GetById(id));
 
             return _mapper.Map<ProductViewModel>(product);
-        }
-
-        private bool ProductExists(Guid id)
-        {
-            return _context.Products.Any(e => e.Id == id);
         }
     }
 }

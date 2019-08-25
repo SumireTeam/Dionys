@@ -52,6 +52,7 @@ namespace Dionys.Web
             services.AddTransient<NestedMappingScenario>();
             services.AddTransient<IDionysContext, DionysContext>();
             services.AddTransient<IConsumedProductService, ConsumedProductService>();
+            services.AddTransient<IProductService, ProductService>();
 
 
             var sp = services.BuildServiceProvider();

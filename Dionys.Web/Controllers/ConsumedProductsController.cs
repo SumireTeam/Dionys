@@ -28,14 +28,14 @@ namespace Dionys.Web.Controllers
         [HttpGet]
         public PagingViewModel<ConsumedProductResponseViewModel> GetConsumedProducts([FromQuery] PagingParameterModel paging)
         {
-            var consumedProductDtos = _consumedProductService.GetAll()
+            var consumedProducts = _consumedProductService.GetAll()
                 .Select(x => _mapper.Map<ConsumedProductResponseViewModel>(x))
                 .Skip(paging.Page * paging.ElementsPerPage).Take(paging.ElementsPerPage).ToList();
 
             return new PagingViewModel<ConsumedProductResponseViewModel>
             {
-                Elements = consumedProductDtos.Count,
-                Items = consumedProductDtos
+                Elements = consumedProducts.Count,
+                Items = consumedProducts
             };
         }
 

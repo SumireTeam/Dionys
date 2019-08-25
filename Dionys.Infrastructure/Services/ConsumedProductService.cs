@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using Dionys.Infrastructure.Extensions;
 using Dionys.Infrastructure.Models;
 using Dionys.Infrastructure.Services.Exceptions;
@@ -10,19 +9,13 @@ using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Dionys.Infrastructure.Services
 {
-    public interface IConsumedProductService
+    public interface IConsumedProductService : ICrudService<ConsumedProduct>
     {
-        Product GetAssociatedProduct(ConsumedProduct consumedProductDto);
-        bool Create(ConsumedProduct consumedProduct);
-        bool Update(ConsumedProduct consumedProduct, bool ignoreValidator = false);
-        bool Delete(ConsumedProduct consumedProduct, bool ignoreValidator = false);
-        ConsumedProduct GetById(Guid id, bool includeCopmlexEntities = true);
         IEnumerable<ConsumedProduct> GetAll(bool includeCopmlexEntities = true);
-        IEnumerable<ConsumedProduct> SearchByName(string searchPa);
-        bool IsExists(Guid id);
+        Product GetAssociatedProduct(ConsumedProduct entity);
     }
 
-    public class ConsumedProductService : IService, IConsumedProductService
+    public class ConsumedProductService : IConsumedProductService
     {
         private readonly DionysContext _context;
 
@@ -31,9 +24,9 @@ namespace Dionys.Infrastructure.Services
             _context = context;
         }
 
-        public bool Create(ConsumedProduct consumedProduct)
+        public bool Create(ConsumedProduct consumedProduct, bool ignoreValidator = false)
         {
-            if (!Validate(consumedProduct))
+            if (!ignoreValidator && !Validate(consumedProduct))
                 return false;
 
             // Find assoc product
@@ -106,7 +99,7 @@ namespace Dionys.Infrastructure.Services
 
         public IEnumerable<ConsumedProduct> GetAll(bool includeCopmlexEntities = true)
         {
-            var consumedProductList = _context.ConsumedProducts;
+            var consumedProductList = _context.ConsumedProducts.OrderBy(cp => cp.Id);
 
             if (includeCopmlexEntities)
                 return consumedProductList.Include(e => e.Product);
@@ -118,24 +111,14 @@ namespace Dionys.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public bool IsExists(Guid id)
+        public bool IsExist(Guid id)
         {
             return _context.ConsumedProducts.Any(cp => cp.Id == id);
         }
 
-
         public Product GetAssociatedProduct(ConsumedProduct consumedProduct)
         {
             return _context.ConsumedProducts.Find(consumedProduct.Id).Product;
-        }
-
-        public IEnumerable<ConsumedProduct> GetAllProduct()
-        {
-            var consumedProductDtos = _context.ConsumedProducts.OrderBy(x => x.Timestamp)
-                .Include(x => x.Product)
-                .OrderBy(cp => cp.Id);
-
-            return consumedProductDtos;
         }
 
         private bool Validate(ConsumedProduct consumedProduct)

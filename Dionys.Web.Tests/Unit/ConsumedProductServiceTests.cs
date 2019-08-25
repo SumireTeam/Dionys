@@ -36,7 +36,7 @@ namespace Dionys.Web.Tests.Unit
             var service = new ConsumedProductService(ctx);
 
             // act
-            var result = service.IsExists(consumedProduct.Id);
+            var result = service.IsExist(consumedProduct.Id);
 
             ctx.Dispose();
 
@@ -61,7 +61,7 @@ namespace Dionys.Web.Tests.Unit
 
             // act
             service.Delete(consumedProduct);
-            var result = service.IsExists(consumedProduct.Id);
+            var result = service.IsExist(consumedProduct.Id);
 
             ctx.Dispose();
 
