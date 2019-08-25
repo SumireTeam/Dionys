@@ -13,7 +13,7 @@ before_build:
   - cmd: dotnet --version
   # Display minimal restore text
   - cmd: dotnet restore ./Dionys.Web/Dionys.Web.csproj --verbosity m
-  - cmd: dotnet restore ./Dionys.Web.Infrastructure/Dionys.Infrastructure.csproj --verbosity m
+  - cmd: dotnet restore ./Dionys.Infrastructure/Dionys.Infrastructure.csproj --verbosity m
 clone_depth: 1
 test_script:
   # restore packages for our unit tests
