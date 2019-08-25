@@ -24,12 +24,12 @@ namespace Dionys.Infrastructure.Services
             _context = context;
         }
 
-        public bool Create(Product entity, bool ignoreValidator = false)
+        public bool Create(Product product, bool ignoreValidator = false)
         {
-            if (!ignoreValidator && !Validate(entity))
+            if (!ignoreValidator && !Validate(product))
                 return false;
 
-            _context.Products.Add(entity);
+            _context.Products.Add(product);
 
             try
             {
@@ -42,12 +42,12 @@ namespace Dionys.Infrastructure.Services
             }
         }
 
-        public bool Update(Product entity, bool ignoreValidator = false)
+        public bool Update(Product product, bool ignoreValidator = false)
         {
-            if (!ignoreValidator && !Validate(entity))
+            if (!ignoreValidator && !Validate(product))
                 return false;
 
-            _context.Products.Update(entity);
+            _context.Products.Update(product);
 
             try
             {
@@ -60,14 +60,14 @@ namespace Dionys.Infrastructure.Services
             }
         }
 
-        public bool Delete(Product entity, bool ignoreValidator = false)
+        public bool Delete(Product product, bool ignoreValidator = false)
         {
             try
             {
-                var dbProduct = _context.Products.First(p => p.Id == entity.Id && !p.IsDeleted());
-                dbProduct.DeletedAt = DateTime.Now;
+                var dbProduct = _context.Products.First(p => p.Id == product.Id && !p.IsDeleted());
+                dbProduct.SetDeleted();
 
-                return Update(entity);
+                return Update(product);
             }
             catch
             {

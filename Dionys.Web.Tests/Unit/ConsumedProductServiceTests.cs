@@ -10,35 +10,33 @@ namespace Dionys.Web.Tests.Unit
 {
     public class ConsumedProductServiceTests
     {
-        public DbContextOptions<DionysContext> ContextOptions;
-
-        [SetUp]
-        public void SetUp()
-        {
-            ContextOptions = new DbContextOptionsBuilder<DionysContext>()
-                .UseInMemoryDatabase("tests")
-                .Options;
-        }
-
         [Test]
         public void IsConsumedProductExists_Pass()
         {
             // arrange
+            var contextOptions = new DbContextOptionsBuilder<DionysContext>()
+                .UseInMemoryDatabase("IsConsumedProductExists_Pass")
+                .Options;
+
             var consumedProduct = new ConsumedProduct
             {
                 ProductId = Guid.Parse("274684A2-D52B-4FB8-8BAD-1F065BA76071"),
                 Timestamp = DateTime.UtcNow,
             };
-            var ctx = new DionysContext(ContextOptions);
 
-            ctx.ConsumedProducts.Add(consumedProduct);
-            ctx.SaveChanges();
-            var service = new ConsumedProductService(ctx);
+            using (var ctx = new DionysContext(contextOptions))
+            {
+                ctx.ConsumedProducts.Add(consumedProduct);
+                ctx.SaveChanges();
+            }
 
             // act
-            var result = service.IsExist(consumedProduct.Id);
-
-            ctx.Dispose();
+            bool result;
+            using (var ctx = new DionysContext(contextOptions))
+            {
+                var service = new ConsumedProductService(ctx);
+                result = service.IsExist(consumedProduct.Id);
+            }
 
             // assert
             Assert.That(result == true);
@@ -48,22 +46,34 @@ namespace Dionys.Web.Tests.Unit
         public void IsConsumedProductExists_Fail()
         {
             // arrange
+            var contextOptions = new DbContextOptionsBuilder<DionysContext>()
+                .UseInMemoryDatabase("IsConsumedProductExists_Fail")
+                .Options;
+
             var consumedProduct = new ConsumedProduct
             {
                 ProductId = Guid.Parse("274684A2-D52B-4FB8-8BAD-1F065BA76071"),
                 Timestamp = DateTime.UtcNow,
             };
-            var ctx = new DionysContext(ContextOptions);
 
-            ctx.ConsumedProducts.Add(consumedProduct);
-            ctx.SaveChanges();
-            var service = new ConsumedProductService(ctx);
+            using (var ctx = new DionysContext(contextOptions))
+            {
+                ctx.ConsumedProducts.Add(consumedProduct);
+                ctx.SaveChanges();
+            }
 
             // act
-            service.Delete(consumedProduct);
-            var result = service.IsExist(consumedProduct.Id);
+            bool result;
+            using (var ctx = new DionysContext(contextOptions))
+            {
+                new ConsumedProductService(ctx).Delete(consumedProduct);
+                ctx.SaveChanges();
+            }
 
-            ctx.Dispose();
+            using (var ctx = new DionysContext(contextOptions))
+            {
+                result = new ConsumedProductService(ctx).IsExist(consumedProduct.Id);
+            }
 
             // assert
             Assert.That(result == false);
