@@ -54,7 +54,7 @@ class Create extends React.Component<Props, State> {
     const consumed = this.state.consumed;
 
     return (
-      <Layout title="Create consumed product">
+      <Layout title="Add consumed product">
         <Breadcrumbs className="breadcrumbs" aria-label="Breadcrumb">
           <Link to="/">Home</Link>
           <Link to="/consumed">Consumed list</Link>

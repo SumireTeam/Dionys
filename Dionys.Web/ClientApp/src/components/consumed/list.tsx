@@ -47,19 +47,19 @@ class List extends React.Component<Props, {}> {
                   size="small"
                   color="primary"
                   component={LinkAdapter}
-                  to={`/consumed/${consumed.id}`}>View</Button>
+                  to={`/consumed/${consumed.id}`}>More details</Button>
 
                 <Button className="button"
                   variant="contained"
                   size="small"
                   component={LinkAdapter}
-                  to={`/consumed/${consumed.id}/edit`}>Edit</Button>
+                  to={`/consumed/${consumed.id}/edit`}>Modify</Button>
 
                 <Button className="button"
                   variant="contained"
                   size="small"
                   color="secondary"
-                  onClick={() => this.props.openDeleteDialog(consumed)}>Delete</Button>
+                  onClick={() => this.props.openDeleteDialog(consumed)}>Remove</Button>
               </TableCell>
             </TableRow>
           ))}

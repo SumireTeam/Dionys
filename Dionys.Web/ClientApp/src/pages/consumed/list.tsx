@@ -79,7 +79,7 @@ class List extends React.Component<{}, State> {
             variant="contained"
             color="primary"
             component={LinkAdapter}
-            to={'/consumed/create'}>Create</Button>
+            to={'/consumed/create'}>Add consumed product</Button>
         </div>
 
         {this.state.loading

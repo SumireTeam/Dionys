@@ -89,9 +89,7 @@ namespace Dionys.Infrastructure.Services
         {
             var products = _context.Products.OrderBy(p => p.Id);
 
-            if (!includeDeleted)
-                return products.Where(p => !p.IsDeleted());
-            return products;
+            return !includeDeleted ? products.Where(p => !p.IsDeleted()) : products;
         }
 
         public IEnumerable<Product> SearchByName(string searchParameter)

@@ -80,10 +80,10 @@
     "typescript": "~3.4.0"
   },
   "scripts": {
-    "start": "rimraf ./build && node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "cross-env CI=true node scripts/test.js --env=jsdom",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx ./"
+    "start": "npm i && rimraf ./build && node scripts/start.js",
+    "build": "npm i && node scripts/build.js",
+    "test": "npm i && cross-env CI=true node scripts/test.js --env=jsdom",
+    "lint": "npm i && eslint --ext .js,.jsx,.ts,.tsx ./"
   },
   "browserslist": {
     "production": [

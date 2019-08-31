@@ -1,12 +1,4 @@
-# Dionys Forontend
-
-## Installation
-
-Install dependencies:
-
-```sh
-npm i
-```
+# Dionys Frontend
 
 ## Development
 
