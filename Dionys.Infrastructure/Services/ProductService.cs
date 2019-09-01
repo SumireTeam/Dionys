@@ -115,7 +115,7 @@ namespace Dionys.Infrastructure.Services
 
         private bool Validate(Product product)
         {
-            return true;
+            return product != null;
         }
     }
 }

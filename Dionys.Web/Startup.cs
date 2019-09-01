@@ -1,8 +1,11 @@
 using AutoMapper;
 using Dionys.Infrastructure.Models;
 using Dionys.Infrastructure.Services;
+using Dionys.Web.App.Jwt;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +46,23 @@ namespace Dionys.Web
                 )
             );
 
+            const string signingSecurityKey = "0d5b3235a8b403c3dab9c3f4f65c07fcalskd234n1k41230";
+            var signingKey = new SigningSymmetricKey(signingSecurityKey);
+            services.AddSingleton<IJwtSigningEncodingKey>(signingKey);
+            const string jwtSchemeName = "JwtBearer";
+            var signingDecodingKey = (IJwtSigningDecodingKey)signingKey;
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = jwtSchemeName;
+                options.DefaultChallengeScheme = jwtSchemeName;
+            });
+
+            services.AddDefaultIdentity<User>()
+                .AddDefaultUI(UIFramework.Bootstrap4);
+
+            //services.AddIdentityServer().AddCookieAuthentication();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "Dionys API", Version = "indev" });
@@ -67,6 +87,7 @@ namespace Dionys.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseAuthentication();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

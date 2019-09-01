@@ -7,7 +7,9 @@ namespace Dionys.Infrastructure.Models
 {
     public class DionysContext : DbContext, IDionysContext
     {
-        public DionysContext(DbContextOptions options) : base(options) { }
+        public DionysContext(DbContextOptions options) : base(options)
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -15,8 +17,9 @@ namespace Dionys.Infrastructure.Models
             modelBuilder.Seed();
         }
 
-        public DbSet<Product>         Products         { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<ConsumedProduct> ConsumedProducts { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public Task<int> SaveChangesAsync()
         {
