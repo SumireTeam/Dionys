@@ -1,8 +1,5 @@
 version: '1.0.{build}'
 image: Visual Studio 2019
-branches:
-  only:
-  - master
 init:
   # Good practise, because Windows line endings are different from Unix/Linux ones
   - cmd: git config --global core.autocrlf true
@@ -12,12 +9,11 @@ before_build:
   # Display .NET Core version
   - cmd: dotnet --version
   # Display minimal restore text
-  - cmd: dotnet restore ./Dionys.Web/Dionys.Web.csproj --verbosity m
-  - cmd: dotnet restore ./Dionys.Infrastructure/Dionys.Infrastructure.csproj --verbosity m
+  - cmd: dotnet restore Dionys.Web --verbosity m
+  - cmd: dotnet restore Dionys.Infrastructure --verbosity m
+  - cmd: dotnet restore Dionys.Web.Tests --verbosity m
 clone_depth: 1
 test_script:
-  - cmd: cd Dionys.Web.Tests
-  - cmd: dotnet restore
   - cmd: dotnet test
 on_finish :
   # any cleanup in here

@@ -9,7 +9,7 @@ namespace Dionys.Infrastructure.Extensions
     public static class SoftDeleteableModelExtesions
     {
         public static bool IsDeleted(this ISoftDeleteableModel self) => self.DeletedAt.HasValue;
-        public static void SetDeleted(this ISoftDeleteableModel self, bool ignoreError = false)
+        public static void SetDeleted(this ISoftDeleteableModel self)
         {
             self.DeletedAt = DateTimeOffset.UtcNow.DateTime;
         }
