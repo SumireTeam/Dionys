@@ -24,7 +24,8 @@ namespace Dionys.Web.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult<string> Post(AuthenticationRequest authRequest)
+        [HttpPost(Name = "Authorize")]
+        public ActionResult<string> Authorize(AuthenticationRequest authRequest)
         {
             // 1. Проверяем данные пользователя из запроса.
             // ...

@@ -5,7 +5,7 @@ using AutoMapper;
 using Dionys.Infrastructure.Extensions;
 using Dionys.Infrastructure.Models;
 using Dionys.Infrastructure.Services;
-using Dionys.Web.Models.DTO;
+using Dionys.Web.Models.Api;
 using Dionys.Web.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +26,6 @@ namespace Dionys.Web.Controllers
 
         // GET: api/Products
         [HttpGet]
-
         public PagingViewModel<ProductViewModel> GetProducts([FromQuery] PagingParameterModel pagingModel)
         {
             var products = _productService.GetAll().Skip(pagingModel.Page * pagingModel.ElementsPerPage)

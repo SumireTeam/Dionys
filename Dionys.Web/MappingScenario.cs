@@ -1,7 +1,7 @@
 using System;
 using AutoMapper;
 using Dionys.Infrastructure.Models;
-using Dionys.Web.Models.DTO;
+using Dionys.Web.Models.Api;
 
 namespace Dionys.Web
 {
@@ -12,9 +12,9 @@ namespace Dionys.Web
             CreateMap<ProductViewModel, Product>();
             CreateMap<Product, ProductViewModel>();
 
-            CreateMap<ConsumedProductRequestViewModel, ConsumedProduct>();
-            CreateMap<ConsumedProduct, ConsumedProductResponseViewModel>();
-            CreateMap<ConsumedProduct, ConsumedProductRequestViewModel>();
+            CreateMap<ConsumedProductRequest, ConsumedProduct>();
+            CreateMap<ConsumedProduct, ConsumedProductResponse>();
+            CreateMap<ConsumedProduct, ConsumedProductRequest>();
         }
     }
 }

@@ -1,20 +1,15 @@
 using System;
 
-namespace Dionys.Web.Models.DTO
+namespace Dionys.Web.Models.Api
 {
-    public class ConsumedProductResponseViewModel
+    public class ConsumedProductRequest
     {
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Consumed product id
+        /// Consumed product ID
         /// </summary>
         public Guid ProductId { get; set; }
-
-        /// <summary>
-        /// Consumed product
-        /// </summary>
-        public ProductViewModel Product { get; set; }
 
         /// <summary>
         /// Consumed product weight
