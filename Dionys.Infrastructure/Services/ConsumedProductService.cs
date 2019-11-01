@@ -86,7 +86,7 @@ namespace Dionys.Infrastructure.Services
 
         public ConsumedProduct GetById(Guid id, bool includeCopmlexEntities = true)
         {
-            var consumedProduct = _context.ConsumedProducts.FirstOr(x => x.Id == id, new ConsumedProduct());
+            var consumedProduct = _context.ConsumedProducts.Single(x => x.Id == id) ?? new ConsumedProduct();
 
             if (includeCopmlexEntities)
                 _context.Entry(consumedProduct).Reference(x => x.Product).Load();

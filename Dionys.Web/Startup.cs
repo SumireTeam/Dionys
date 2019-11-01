@@ -4,13 +4,13 @@ using Dionys.Infrastructure.Services;
 using Dionys.Web.App.Jwt;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Dionys.Web
@@ -27,8 +27,7 @@ namespace Dionys.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvcCore().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonFormatters()
+            services.AddMvcCore().SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddApiExplorer();
 
             // In production, the React files will be served from this directory
@@ -46,26 +45,9 @@ namespace Dionys.Web
                 )
             );
 
-            const string signingSecurityKey = "0d5b3235a8b403c3dab9c3f4f65c07fcalskd234n1k41230";
-            var signingKey = new SigningSymmetricKey(signingSecurityKey);
-            services.AddSingleton<IJwtSigningEncodingKey>(signingKey);
-            const string jwtSchemeName = "JwtBearer";
-            var signingDecodingKey = (IJwtSigningDecodingKey)signingKey;
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = jwtSchemeName;
-                options.DefaultChallengeScheme = jwtSchemeName;
-            });
-
-            services.AddDefaultIdentity<User>()
-                .AddDefaultUI(UIFramework.Bootstrap4);
-
-            //services.AddIdentityServer().AddCookieAuthentication();
-
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Dionys API", Version = "indev" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dionys API", Version = "indev" });
             });
 
             services.AddTransient<MappingScenario>();
@@ -85,9 +67,9 @@ namespace Dionys.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseAuthentication();
+            //app.UseAuthentication();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -97,12 +79,8 @@ namespace Dionys.Web
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
-            });
+            app.UseRouting();
+            app.UseEndpoints(endpoints => endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}"));
 
             app.UseSpa(spa =>
             {

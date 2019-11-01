@@ -5,7 +5,6 @@ using Dionys.Infrastructure.Extensions;
 using Dionys.Infrastructure.Models;
 using Dionys.Infrastructure.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Dionys.Infrastructure.Services
 {
@@ -77,7 +76,7 @@ namespace Dionys.Infrastructure.Services
 
         public Product GetById(Guid id, bool includeCopmlexEntities = true)
         {
-            var entity = _context.Products.FirstOr(x => x.Id == id, new Product());
+            var entity = _context.Products.SingleOrDefault(x => x.Id == id) ?? new Product();
 
             if (entity.IsNew())
                 throw new NotFoundEntityServiceException($"Cannot find {entity.GetType()} entity by id: ${id}");
@@ -87,18 +86,12 @@ namespace Dionys.Infrastructure.Services
 
         public IEnumerable<Product> GetAll(bool includeDeleted = false)
         {
-            var products = _context.Products.OrderBy(p => p.Id);
-
-            return !includeDeleted ? products.Where(p => !p.IsDeleted()) : products;
+            return _context.Products.OrderBy(p => p.Id).Where(p => !p.DeletedAt.HasValue || includeDeleted);
         }
 
         public IEnumerable<Product> SearchByName(string searchParameter)
         {
-            var products = GetAll()
-                .Where(p => EF.Functions.Like(p.Name, searchParameter))
-                .OrderBy(p => p.Name);
-
-            return products;
+            return GetAll().Where(p => EF.Functions.Like(p.Name, searchParameter)).OrderBy(p => p.Name);
         }
 
         public bool IsExist(Guid id)
@@ -108,12 +101,12 @@ namespace Dionys.Infrastructure.Services
 
         public bool IsExist(Guid id, bool includeDeleted)
         {
-            if(includeDeleted)
+            if (includeDeleted)
                 return _context.Products.Any(p => p.Id == id);
             return _context.Products.Any(p => p.Id == id && p.IsDeleted() == includeDeleted);
         }
 
-        private bool Validate(Product product)
+        private static bool Validate(IDbModel product)
         {
             return product != null;
         }

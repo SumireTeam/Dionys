@@ -50,7 +50,7 @@ namespace Dionys.Infrastructure.Services
         public bool Delete(User entity, bool ignoreValidator = false)
         {
             entity.DeletedAt = DateTimeOffset.UtcNow;
-            
+
             _context.Users.Update(entity);
 
             try
@@ -66,7 +66,7 @@ namespace Dionys.Infrastructure.Services
 
         public User GetById(Guid id, bool includeCopmlexEntities = true)
         {
-            return _context.Users.Where(u => u.Id == id).FirstOr(null);
+            return _context.Users.SingleOrDefault(u => u.Id == id);
         }
 
         public IEnumerable<User> SearchByName(string searchParameter)
@@ -81,7 +81,7 @@ namespace Dionys.Infrastructure.Services
 
         public bool IsRightPassword(Guid id, string password)
         {
-            var user = _context.Users.Where(u => u.Id == id).FirstOr(null);
+            var user = _context.Users.SingleOrDefault(u => u.Id == id);
 
             if (user != null)
             {
@@ -114,7 +114,7 @@ namespace Dionys.Infrastructure.Services
 
         public bool IsLocked(Guid id)
         {
-            var user = _context.Users.Where(u => u.Id == id).FirstOr(null);
+            var user = _context.Users.SingleOrDefault(u => u.Id == id);
 
             return user?.LockedAt != null;
         }
@@ -141,7 +141,7 @@ namespace Dionys.Infrastructure.Services
 
         public bool IsExist(Guid id, bool includeDeleted)
         {
-            if(includeDeleted)
+            if (includeDeleted)
                 return _context.Users.Any(u => u.Id == id);
 
             return _context.Users.Any(u => u.Id == id && u.DeletedAt == null);

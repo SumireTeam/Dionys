@@ -55,8 +55,7 @@ namespace Dionys.Web.Controllers.Statistic
             var total = new ConsumedProductsTotal
             {
                 Products = consumedProducts,
-                TotalCalories =
-                    Convert.ToInt64(consumedProducts.Select(x => x.Weight * x.Product.Calories / 100).FirstOr(0))
+                TotalCalories = Convert.ToInt64(consumedProducts.Select(x => x.Weight * x.Product.Calories / 100).FirstOrDefault())
             };
 
             return total;
