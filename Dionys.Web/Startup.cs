@@ -1,7 +1,6 @@
 using AutoMapper;
 using Dionys.Infrastructure.Models;
 using Dionys.Infrastructure.Services;
-using Dionys.Web.App.Jwt;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace Dionys.Web
 {
@@ -24,7 +22,9 @@ namespace Dionys.Web
 
         public IConfiguration Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "ASP0000:Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'", Justification = "<Pending>")]
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvcCore().SetCompatibilityVersion(CompatibilityVersion.Version_3_0)

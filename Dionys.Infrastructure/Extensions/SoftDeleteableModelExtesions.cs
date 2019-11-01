@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Dionys.Infrastructure.Models;
-using Dionys.Infrastructure.Services.Exceptions;
 
 namespace Dionys.Infrastructure.Extensions
 {

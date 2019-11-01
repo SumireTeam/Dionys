@@ -5,7 +5,6 @@ using Dionys.Infrastructure.Extensions;
 using Dionys.Infrastructure.Models;
 using Dionys.Infrastructure.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Dionys.Infrastructure.Services
 {
@@ -91,7 +90,7 @@ namespace Dionys.Infrastructure.Services
             if (includeCopmlexEntities)
                 _context.Entry(consumedProduct).Reference(x => x.Product).Load();
 
-            if (consumedProduct.IsNew())
+            if (consumedProduct.Id == Guid.Empty)
                 throw new NotFoundEntityServiceException($"Cannot find {consumedProduct.GetType()} entity by id: ${id}");
 
             return consumedProduct;

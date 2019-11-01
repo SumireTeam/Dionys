@@ -76,12 +76,12 @@ namespace Dionys.Infrastructure.Services
 
         public Product GetById(Guid id, bool includeCopmlexEntities = true)
         {
-            var entity = _context.Products.SingleOrDefault(x => x.Id == id) ?? new Product();
+            var products = _context.Products.Where(x => x.Id == id);
 
-            if (entity.IsNew())
-                throw new NotFoundEntityServiceException($"Cannot find {entity.GetType()} entity by id: ${id}");
+            if (!products.Any())
+                throw new NotFoundEntityServiceException($"Cannot find entity by id: ${id}");
 
-            return entity;
+            return products.First();
         }
 
         public IEnumerable<Product> GetAll(bool includeDeleted = false)
@@ -101,9 +101,7 @@ namespace Dionys.Infrastructure.Services
 
         public bool IsExist(Guid id, bool includeDeleted)
         {
-            if (includeDeleted)
-                return _context.Products.Any(p => p.Id == id);
-            return _context.Products.Any(p => p.Id == id && p.IsDeleted() == includeDeleted);
+            return _context.Products.Any(p => p.Id == id && (includeDeleted || !p.DeletedAt.HasValue));
         }
 
         private static bool Validate(IDbModel product)

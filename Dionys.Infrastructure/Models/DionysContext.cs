@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Dionys.Infrastructure.Seeds;
 using Microsoft.EntityFrameworkCore;
