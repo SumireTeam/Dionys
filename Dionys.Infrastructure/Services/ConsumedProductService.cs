@@ -10,7 +10,7 @@ namespace Dionys.Infrastructure.Services
 {
     public interface IConsumedProductService : ICrudService<ConsumedProduct>
     {
-        IEnumerable<ConsumedProduct> GetAll(bool includeCopmlexEntities = true);
+        IEnumerable<ConsumedProduct> GetAll();
         Product GetAssociatedProduct(ConsumedProduct entity);
     }
 
@@ -23,10 +23,29 @@ namespace Dionys.Infrastructure.Services
             _context = context;
         }
 
-        public bool Create(ConsumedProduct consumedProduct, bool ignoreValidator = false)
+        public bool TryCreate(ConsumedProduct consumedProduct)
         {
-            if (!ignoreValidator && !Validate(consumedProduct))
+            try
+            {
+                if (!Validate(consumedProduct))
+                    return false;
+
+                // Find assoc product
+                consumedProduct.Product = _context.Products.Find(consumedProduct.Product.Id);
+                _context.ConsumedProducts.Add(consumedProduct);
+
+                _context.SaveChanges();
+                return true;
+            }
+            catch
+            {
                 return false;
+            }
+        }
+
+        public void Create(ConsumedProduct consumedProduct)
+        {
+            Validate(consumedProduct);
 
             // Find assoc product
             var product = _context.Products.Find(consumedProduct.Product.Id);
@@ -34,61 +53,34 @@ namespace Dionys.Infrastructure.Services
             consumedProduct.Product = product;
             _context.ConsumedProducts.Add(consumedProduct);
 
-            try
-            {
-                _context.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            _context.SaveChanges();
         }
 
-        public bool Update(ConsumedProduct consumedProduct, bool ignoreValidator = false)
+        public void Update(ConsumedProduct consumedProduct)
         {
-            if (!ignoreValidator && !Validate(consumedProduct))
-                return false;
+            Validate(consumedProduct);
 
             // Do not update assoc product (member)
             consumedProduct.Product = null;
             _context.ConsumedProducts.Update(consumedProduct);
 
-            try
-            {
-                _context.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            _context.SaveChanges();
         }
 
-        public bool Delete(ConsumedProduct consumedProduct, bool ignoreValidator = false)
+        public void Delete(ConsumedProduct consumedProduct)
         {
             //if (!ignoreValidator && !Validate(consumedProduct))
             //    return false;
 
             _context.ConsumedProducts.Remove(consumedProduct);
-
-            try
-            {
-                _context.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            _context.SaveChanges();
         }
 
-        public ConsumedProduct GetById(Guid id, bool includeCopmlexEntities = true)
+        public ConsumedProduct GetById(Guid id)
         {
-            var consumedProduct = _context.ConsumedProducts.Single(x => x.Id == id) ?? new ConsumedProduct();
+            var consumedProduct = _context.ConsumedProducts.Single(x => x.Id == id);
 
-            if (includeCopmlexEntities)
-                _context.Entry(consumedProduct).Reference(x => x.Product).Load();
+            _context.Entry(consumedProduct).Reference(x => x.Product).Load();
 
             if (consumedProduct.Id == Guid.Empty)
                 throw new NotFoundEntityServiceException($"Cannot find {consumedProduct.GetType()} entity by id: ${id}");
@@ -96,13 +88,19 @@ namespace Dionys.Infrastructure.Services
             return consumedProduct;
         }
 
-        public IEnumerable<ConsumedProduct> GetAll(bool includeCopmlexEntities = true)
+        public ConsumedProduct GetByIdOr(Guid id, IDbModel entity)
         {
-            var consumedProductList = _context.ConsumedProducts.OrderBy(cp => cp.Id);
+            throw new NotImplementedException();
+        }
 
-            if (includeCopmlexEntities)
-                return consumedProductList.Include(e => e.Product);
-            return consumedProductList;
+        public ConsumedProduct GetByIdOrDefault(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ConsumedProduct> GetAll()
+        {
+            return _context.ConsumedProducts.OrderBy(cp => cp.Id).Include(e => e.Product);
         }
 
         public IEnumerable<ConsumedProduct> SearchByName(string searchPattern)

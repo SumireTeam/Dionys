@@ -65,8 +65,8 @@ namespace Dionys.Web.Controllers
 
             var product = _mapper.Map<Product>(productViewModel);
 
-            if (_productService.Update(product))
-                return NoContent();
+            _productService.Update(product);
+
             return NoContent();
         }
 
@@ -76,9 +76,8 @@ namespace Dionys.Web.Controllers
         {
             var product = _mapper.Map<Product>(productViewModel);
 
-            if (_productService.Create(product))
-                return CreatedAtAction("GetProduct", new { id = product.Id }, _mapper.Map<ProductViewModel>(product));
-            return Redirect("List");
+            _productService.Create(product);
+            return CreatedAtAction("GetProduct", new { id = product.Id }, _mapper.Map<ProductViewModel>(product));
         }
 
         // DELETE: api/Products/5

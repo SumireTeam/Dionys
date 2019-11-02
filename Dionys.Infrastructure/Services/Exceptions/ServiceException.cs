@@ -8,5 +8,13 @@ namespace Dionys.Infrastructure.Services.Exceptions
         {
 
         }
+
+        protected ServiceException()
+        {
+        }
+
+        protected ServiceException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 }

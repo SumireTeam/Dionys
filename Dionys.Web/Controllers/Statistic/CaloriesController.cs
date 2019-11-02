@@ -48,7 +48,7 @@ namespace Dionys.Web.Controllers.Statistic
         /// </summary>
         /// <param name="products">products</param>
         /// <returns>report</returns>
-        private ConsumedProductsTotal GetCaloriesFrom(IEnumerable<ConsumedProduct> products)
+        private static ConsumedProductsTotal GetCaloriesFrom(IEnumerable<ConsumedProduct> products)
         {
             IEnumerable<ConsumedProduct> consumedProducts = products.ToList();
 
@@ -66,14 +66,14 @@ namespace Dionys.Web.Controllers.Statistic
         /// </summary>
         /// <param name="datetime">DateTime</param>
         /// <returns>year, week Tuple</returns>
-        private Tuple<int, int> GetWeekYear(DateTime datetime)
+        private static Tuple<int, int> GetWeekYear(DateTime datetime)
         {
             // TODO: culture info
-            CultureInfo cultureInfo = new CultureInfo("ru-RU");
-            Calendar calendar = cultureInfo.Calendar;
+            var cultureInfo = new CultureInfo("ru-RU");
+            var calendar = cultureInfo.Calendar;
 
-            int year = datetime.Year;
-            int week = calendar.GetWeekOfYear(datetime, CalendarWeekRule.FirstDay, DayOfWeek.Sunday);
+            var year = datetime.Year;
+            var week = calendar.GetWeekOfYear(datetime, CalendarWeekRule.FirstDay, DayOfWeek.Sunday);
 
             return new Tuple<int, int>(year, week);
         }

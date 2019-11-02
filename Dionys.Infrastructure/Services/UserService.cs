@@ -23,48 +23,39 @@ namespace Dionys.Infrastructure.Services
             _context = context;
         }
 
-        public bool Create(User user, bool ignoreValidator = false)
+        public void Create(User user)
         {
             _context.Users.Add(user);
-
-            try
-            {
-                _context.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            _context.SaveChanges();
         }
 
-        public bool Update(User entity, bool ignoreValidator = false)
+        public void Update(User entity)
         {
-
-
             throw new NotImplementedException();
         }
 
-        public bool Delete(User entity, bool ignoreValidator = false)
+        public void Delete(User entity)
         {
             entity.DeletedAt = DateTimeOffset.UtcNow;
 
             _context.Users.Update(entity);
 
-            try
-            {
-                _context.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            _context.SaveChanges();
         }
 
-        public User GetById(Guid id, bool includeCopmlexEntities = true)
+        public User GetById(Guid id)
         {
             return _context.Users.SingleOrDefault(u => u.Id == id);
+        }
+
+        public User GetByIdOr(Guid id, IDbModel entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public User GetByIdOrDefault(Guid id)
+        {
+            throw new NotImplementedException();
         }
 
         public IEnumerable<User> SearchByName(string searchParameter)

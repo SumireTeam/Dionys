@@ -60,10 +60,7 @@ namespace Dionys.Web.Controllers
 
             var consumedProduct = _mapper.Map<ConsumedProduct>(consumedProductRequest);
 
-            var updateStatusResult = _consumedProductService.Update(consumedProduct);
-
-            if (!updateStatusResult)
-                return NotFound();
+            _consumedProductService.Update(consumedProduct);
 
             return NoContent();
         }

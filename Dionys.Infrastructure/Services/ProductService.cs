@@ -10,7 +10,7 @@ namespace Dionys.Infrastructure.Services
 {
     public interface IProductService : ICrudService<Product>
     {
-        IEnumerable<Product> GetAll(bool includeDeleted = false);
+        IEnumerable<Product> GetAll();
         bool IsExist(Guid id, bool includeDeleted);
     }
 
@@ -23,58 +23,31 @@ namespace Dionys.Infrastructure.Services
             _context = context;
         }
 
-        public bool Create(Product product, bool ignoreValidator = false)
+        public void Create(Product product)
         {
-            if (!ignoreValidator && !Validate(product))
-                return false;
+            Validate(product);
 
             _context.Products.Add(product);
 
-            try
-            {
-                _context.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            _context.SaveChanges();
         }
 
-        public bool Update(Product product, bool ignoreValidator = false)
+        public void Update(Product product)
         {
-            if (!ignoreValidator && !Validate(product))
-                return false;
-
+            Validate(product);
             _context.Products.Update(product);
-
-            try
-            {
-                _context.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            _context.SaveChanges();
         }
 
-        public bool Delete(Product product, bool ignoreValidator = false)
+        public void Delete(Product product)
         {
-            try
-            {
-                var dbProduct = _context.Products.First(p => p.Id == product.Id && !p.IsDeleted());
-                dbProduct.SetDeleted();
+            var dbProduct = _context.Products.First(p => p.Id == product.Id && !p.IsDeleted());
+            dbProduct.SetDeleted();
 
-                return Update(product);
-            }
-            catch
-            {
-                return false;
-            }
+            Update(product);
         }
 
-        public Product GetById(Guid id, bool includeCopmlexEntities = true)
+        public Product GetById(Guid id)
         {
             var products = _context.Products.Where(x => x.Id == id);
 
@@ -84,9 +57,19 @@ namespace Dionys.Infrastructure.Services
             return products.First();
         }
 
-        public IEnumerable<Product> GetAll(bool includeDeleted = false)
+        public Product GetByIdOr(Guid id, IDbModel entity)
         {
-            return _context.Products.OrderBy(p => p.Id).Where(p => !p.DeletedAt.HasValue || includeDeleted);
+            throw new NotImplementedException();
+        }
+
+        public Product GetByIdOrDefault(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Product> GetAll()
+        {
+            return _context.Products.OrderBy(p => p.Id).Where(p => !p.DeletedAt.HasValue);
         }
 
         public IEnumerable<Product> SearchByName(string searchParameter)
@@ -104,9 +87,10 @@ namespace Dionys.Infrastructure.Services
             return _context.Products.Any(p => p.Id == id && (includeDeleted || !p.DeletedAt.HasValue));
         }
 
-        private static bool Validate(IDbModel product)
+        private static void Validate(IDbModel product)
         {
-            return product != null;
+            if(product != null)
+                throw new Exception();
         }
     }
 }
