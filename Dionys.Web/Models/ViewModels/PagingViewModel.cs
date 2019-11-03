@@ -1,10 +1,15 @@
-using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace Dionys.Web.Models.ViewModels
 {
     public class PagingViewModel<T>
     {
-        public int Elements { get; set; }
-        public IEnumerable<T> Items { get; set; }
+        public PagingViewModel(ImmutableArray<T> data)
+        {
+            Items = data;
+        }
+
+        public int Elements => Items.Length;
+        public ImmutableArray<T> Items { get; }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 using AutoMapper;
@@ -24,19 +25,15 @@ namespace Dionys.Web.Controllers
         }
 
         // GET: api/ConsumedProducts/?page={page}&count={count}
-        [DisplayName("ConsumedProductsList")]
+        [DisplayName("ConsumedProductList")]
         [HttpGet]
         public PagingViewModel<ConsumedProductResponse> GetConsumedProducts([FromQuery] PagingParameterModel paging)
         {
             var consumedProducts = _consumedProductService.GetAll()
                 .Select(x => _mapper.Map<ConsumedProductResponse>(x))
-                .Skip(paging.Page * paging.ElementsPerPage).Take(paging.ElementsPerPage).ToList();
+                .Skip(paging.Page * paging.ElementsPerPage).Take(paging.ElementsPerPage).ToImmutableArray();
 
-            return new PagingViewModel<ConsumedProductResponse>
-            {
-                Elements = consumedProducts.Count,
-                Items = consumedProducts
-            };
+            return new PagingViewModel<ConsumedProductResponse>(consumedProducts);
         }
 
         // GET: api/ConsumedProducts/5

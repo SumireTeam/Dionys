@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using AutoMapper;
 using Dionys.Infrastructure.Extensions;
@@ -30,9 +31,9 @@ namespace Dionys.Web.Controllers
         {
             var products = _productService.GetAll().Skip(pagingModel.Page * pagingModel.ElementsPerPage)
                 .Take(pagingModel.ElementsPerPage)
-                .Select(x => _mapper.Map<ProductViewModel>(x)).ToList();
+                .Select(x => _mapper.Map<ProductViewModel>(x)).ToImmutableArray();
 
-            return new PagingViewModel<ProductViewModel> { Elements = products.Count, Items = products };
+            return new PagingViewModel<ProductViewModel>(products);
         }
 
         // GET: api/Products/name/{name}

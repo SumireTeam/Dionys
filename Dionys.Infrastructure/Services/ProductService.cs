@@ -89,8 +89,8 @@ namespace Dionys.Infrastructure.Services
 
         private static void Validate(IDbModel product)
         {
-            if(product != null)
-                throw new Exception();
+            if (product == null)
+                throw new ArgumentNullException(nameof(product));
         }
     }
 }

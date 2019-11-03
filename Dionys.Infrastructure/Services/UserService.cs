@@ -8,9 +8,9 @@ namespace Dionys.Infrastructure.Services
     public interface IUserService : ICrudService<User>
     {
         bool IsRightPassword(Guid id, string password);
-        bool Lock(Guid id);
+        void Lock(Guid id);
         bool IsLocked(Guid id);
-        bool Unlock(Guid id);
+        void Unlock(Guid id);
         bool IsExist(Guid id, bool includeDeleted);
     }
 
@@ -84,21 +84,12 @@ namespace Dionys.Infrastructure.Services
             return false;
         }
 
-        public bool Lock(Guid id)
+        public void Lock(Guid id)
         {
-            try
-            {
-                var user = _context.Users.First(u => u.Id == id);
-                user.LockedAt = DateTimeOffset.UtcNow;
+            var user = _context.Users.First(u => u.Id == id);
+            user.LockedAt = DateTimeOffset.UtcNow;
 
-                _context.SaveChanges();
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            _context.SaveChanges();
         }
 
         public bool IsLocked(Guid id)
@@ -108,24 +99,15 @@ namespace Dionys.Infrastructure.Services
             return user?.LockedAt != null;
         }
 
-        public bool Unlock(Guid id)
+        public void Unlock(Guid id)
         {
-            try
-            {
-                var user = _context.Users.First(u => u.Id == id);
+            var user = _context.Users.Single(u => u.Id == id);
 
-                if (!IsLocked(id))
-                    return false;
+            if (!IsLocked(id))
+                return;
 
-                user.DeletedAt = null;
-                _context.SaveChanges();
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            user.DeletedAt = null;
+            _context.SaveChanges();
         }
 
         public bool IsExist(Guid id, bool includeDeleted)

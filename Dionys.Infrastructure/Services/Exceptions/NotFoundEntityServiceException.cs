@@ -4,7 +4,14 @@ namespace Dionys.Infrastructure.Services.Exceptions
     {
         public NotFoundEntityServiceException(string message) : base(message)
         {
-            // TODO: Fix exception message
+        }
+
+        public NotFoundEntityServiceException()
+        {
+        }
+
+        public NotFoundEntityServiceException(string message, System.Exception innerException) : base(message, innerException)
+        {
         }
     }
 }
