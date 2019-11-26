@@ -231,6 +231,4 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 
-/.ionide
-/.vscode
-/.idea
+*.directory

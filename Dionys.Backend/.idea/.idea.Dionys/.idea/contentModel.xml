@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/.Rider2019.2/system/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2019.2/system/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_Dionys.-776544005.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.nuget/packages/microsoft.net.test.sdk/16.3.0/build/netcoreapp1.0" t="Include">
+      <e p="Microsoft.NET.Test.Sdk.Program.cs" t="Include" />
+    </e>
+    <e p="$USER_HOME$/.nuget/packages/nunit3testadapter/3.15.1/build/netcoreapp2.0/NUnit3.TestAdapter.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/nunit3testadapter/3.15.1/build/netcoreapp2.0/NUnit3.TestAdapter.pdb" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/nunit3testadapter/3.15.1/build/netcoreapp2.0/nunit.engine.api.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/nunit3testadapter/3.15.1/build/netcoreapp2.0/nunit.engine.dll" t="Include" />
+    <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p="Dionys.Infrastructure" t="IncludeRecursive">
+        <e p="Dionys.Infrastructure.csproj" t="IncludeRecursive" />
+        <e p="Extensions" t="Include">
+          <e p="SoftDeletableModelExtensions.cs" t="Include" />
+        </e>
+        <e p="Migrations" t="Include">
+          <e p="20190725074531_Initial.Designer.cs" t="Include" />
+          <e p="20190725074531_Initial.cs" t="Include" />
+          <e p="20190809132637_UpdateProductFields.Designer.cs" t="Include" />
+          <e p="20190809132637_UpdateProductFields.cs" t="Include" />
+          <e p="20190824201404_ProductId.Designer.cs" t="Include" />
+          <e p="20190824201404_ProductId.cs" t="Include" />
+          <e p="20191103022459_DateTimeToDateTimeOffset.Designer.cs" t="Include" />
+          <e p="20191103022459_DateTimeToDateTimeOffset.cs" t="Include" />
+          <e p="DionysContextModelSnapshot.cs" t="Include" />
+        </e>
+        <e p="Models" t="Include">
+          <e p="ConsumedProduct.cs" t="Include" />
+          <e p="DionysContext.cs" t="Include" />
+          <e p="DionysContextFactory.cs" t="Include" />
+          <e p="IDbModel.cs" t="Include" />
+          <e p="IDionysContext.cs" t="Include" />
+          <e p="ISoftDeleteableModel.cs" t="Include" />
+          <e p="Product.cs" t="Include" />
+          <e p="User.cs" t="Include" />
+        </e>
+        <e p="Seeds" t="Include">
+          <e p="ModelBuilderExtensions.cs" t="Include" />
+        </e>
+        <e p="Services" t="Include">
+          <e p="ConsumedProductService.cs" t="Include" />
+          <e p="Exceptions" t="Include">
+            <e p="NotFoundEntityServiceException.cs" t="Include" />
+            <e p="ServiceException.cs" t="Include" />
+          </e>
+          <e p="IService.cs" t="Include" />
+          <e p="ProductService.cs" t="Include" />
+          <e p="UserService.cs" t="Include" />
+        </e>
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="Dionys.Infrastructure.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Dionys.Web" t="IncludeRecursive">
+        <e p="App" t="Include">
+          <e p="Jwt" t="Include">
+            <e p="IJwtSigningEncodingKey.cs" t="Include" />
+          </e>
+        </e>
+        <e p="ClientApp" t="Include">
+          <e p="src" t="Include">
+            <e p="models" t="Include">
+              <e p="paging.ts" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Controllers" t="Include">
+          <e p="AuthenticationController.cs" t="Include" />
+          <e p="ConsumedProductsController.cs" t="Include" />
+          <e p="ProductsController.cs" t="Include" />
+          <e p="Statistic" t="Include">
+            <e p="CaloriesController.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Dionys.Web.csproj" t="IncludeRecursive" />
+        <e p="MappingScenario.cs" t="Include" />
+        <e p="Models" t="Include">
+          <e p="Api" t="Include">
+            <e p="ConsumedProductRequest.cs" t="Include" />
+            <e p="ConsumedProductResponse.cs" t="Include" />
+            <e p="ProductViewModel.cs" t="Include" />
+          </e>
+          <e p="ViewModels" t="Include">
+            <e p="Authorization" t="Include">
+              <e p="LoginViewModel.cs" t="Include" />
+            </e>
+            <e p="PagingParameterModel.cs" t="Include" />
+            <e p="PagingViewModel.cs" t="Include" />
+            <e p="Statistic" t="Include">
+              <e p="ConsumedProductsTotal.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="Startup.cs" t="Include" />
+        <e p="appsettings.Development.json" t="Include" />
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="Dionys.Web.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Dionys.Web.Tests" t="IncludeRecursive">
+        <e p="Dionys.Web.Tests.csproj" t="IncludeRecursive" />
+        <e p="Unit" t="Include">
+          <e p="ConsumedProductServiceTests.cs" t="Include" />
+        </e>
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="Dionys.Web.Tests.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Dionys.sln" t="IncludeFlat" />
+      <e p="Solution Items" t="Include" />
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
