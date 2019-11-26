@@ -1,5 +1,4 @@
-export interface Paging
-{
-  readonly elements: number;
-  readonly items;
+export interface Paging {
+    readonly elements: number;
+    readonly items;
 }

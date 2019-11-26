@@ -1,97 +1,94 @@
-import fetch from 'isomorphic-unfetch';
-import { CrudService, Identity } from '../service';
-import { Paging } from '../../models/paging';
+import fetch from "isomorphic-unfetch";
+import { CrudService, Identity } from "../service";
+import { Paging } from "../../models/paging";
 
 export class ApiServiceError extends Error {
-  public readonly response: Response;
+    public readonly response: Response;
 
-  public constructor(
-    response: Response,
-    message: string = null,
-  ) {
-    super(message);
-    this.response = response;
-  }
+    public constructor(response: Response, message: string = null) {
+        super(message);
+        this.response = response;
+    }
 }
 
 export function request(method: string, endpoint: string, data: object = null) {
-  const options: RequestInit = {
-    method,
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: data ? JSON.stringify(data) : null,
-    credentials: 'same-origin',
-  };
+    const options: RequestInit = {
+        method,
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        },
+        body: data ? JSON.stringify(data) : null,
+        credentials: "same-origin"
+    };
 
-  const url = `api/${endpoint}`;
-  return fetch(url, options);
+    const url = `api/${endpoint}`;
+    return fetch(url, options);
 }
 
-export abstract class ApiCrudService<TData extends Identity, TModel extends Identity>
-  implements CrudService<TModel> { // eslint-disable-line @typescript-eslint/indent
+export abstract class ApiCrudService<TData extends Identity, TModel extends Identity> implements CrudService<TModel> {
+    // eslint-disable-line @typescript-eslint/indent
 
-  protected readonly endpoint: string;
+    protected readonly endpoint: string;
 
-  protected constructor(endpoint: string) {
-    this.endpoint = endpoint;
-    this.mapToModel = this.mapToModel.bind(this);
-    this.mapToData = this.mapToData.bind(this);
-  }
-
-  protected abstract mapToModel(data: TData): TModel;
-  protected abstract mapToData(model: TModel): TData;
-
-  public async list(): Promise<TModel[]> {
-    const response = await request('get', this.endpoint);
-    if (response.status !== 200) {
-      throw new ApiServiceError(response);
+    protected constructor(endpoint: string) {
+        this.endpoint = endpoint;
+        this.mapToModel = this.mapToModel.bind(this);
+        this.mapToData = this.mapToData.bind(this);
     }
 
-    const paging = await response.json() as Paging;
-    const items = paging.items;
-    return items.map(this.mapToModel);
-  }
+    protected abstract mapToModel(data: TData): TModel;
+    protected abstract mapToData(model: TModel): TData;
 
-  public async get(id: string): Promise<TModel> {
-    const response = await request('get', `${this.endpoint}/${id}`);
-    if (response.status !== 200) {
-      throw new ApiServiceError(response);
+    public async list(): Promise<TModel[]> {
+        const response = await request("get", this.endpoint);
+        if (response.status !== 200) {
+            throw new ApiServiceError(response);
+        }
+
+        const paging = (await response.json()) as Paging;
+        const items = paging.items;
+        return items.map(this.mapToModel);
     }
 
-    const item = await response.json() as TData;
-    return this.mapToModel(item);
-  }
+    public async get(id: string): Promise<TModel> {
+        const response = await request("get", `${this.endpoint}/${id}`);
+        if (response.status !== 200) {
+            throw new ApiServiceError(response);
+        }
 
-  public async create(model: TModel): Promise<TModel> {
-    const data = this.mapToData(model);
-    const response = await request('post', this.endpoint, data);
-    if (response.status !== 201) {
-      throw new ApiServiceError(response);
+        const item = (await response.json()) as TData;
+        return this.mapToModel(item);
     }
 
-    const item = await response.json() as TData;
-    return this.mapToModel(item);
-  }
+    public async create(model: TModel): Promise<TModel> {
+        const data = this.mapToData(model);
+        const response = await request("post", this.endpoint, data);
+        if (response.status !== 201) {
+            throw new ApiServiceError(response);
+        }
 
-  public async update(model: TModel): Promise<TModel> {
-    const data = this.mapToData(model);
-    const response = await request('put', `${this.endpoint}/${model.id}`, data);
-    if (response.status !== 204) {
-      throw new ApiServiceError(response);
+        const item = (await response.json()) as TData;
+        return this.mapToModel(item);
     }
 
-    return model;
-  }
+    public async update(model: TModel): Promise<TModel> {
+        const data = this.mapToData(model);
+        const response = await request("put", `${this.endpoint}/${model.id}`, data);
+        if (response.status !== 204) {
+            throw new ApiServiceError(response);
+        }
 
-  public async delete(id: string): Promise<TModel> {
-    const response = await request('delete', `${this.endpoint}/${id}`);
-    if (response.status !== 200) {
-      throw new ApiServiceError(response);
+        return model;
     }
 
-    const item = await response.json() as TData;
-    return this.mapToModel(item);
-  }
+    public async delete(id: string): Promise<TModel> {
+        const response = await request("delete", `${this.endpoint}/${id}`);
+        if (response.status !== 200) {
+            throw new ApiServiceError(response);
+        }
+
+        const item = (await response.json()) as TData;
+        return this.mapToModel(item);
+    }
 }

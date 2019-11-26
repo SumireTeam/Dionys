@@ -1,3 +1,3 @@
-export * from './consumed';
-export * from './products';
-export * from './service';
+export * from "./consumed";
+export * from "./products";
+export * from "./service";
