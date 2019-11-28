@@ -1,5 +1,5 @@
 import { ApiCrudService } from "./service";
-import { Consumed } from "../../models";
+import { IConsumed } from "../../models";
 import { ConsumedService } from "../consumed";
 import { ProductData } from "./products";
 
@@ -11,31 +11,31 @@ export interface ConsumedData {
     readonly timestamp: string;
 }
 
-export class ApiConsumedService extends ApiCrudService<ConsumedData, Consumed> implements ConsumedService {
+export class ApiConsumedService extends ApiCrudService<ConsumedData, IConsumed> implements ConsumedService {
     // eslint-disable-line @typescript-eslint/indent
     public constructor() {
         super("consumedproducts");
     }
 
-    protected mapToModel(data: ConsumedData): Consumed {
+    protected mapToModel(data: ConsumedData): IConsumed {
         return {
             id: data.id,
             productId: data.productId,
             product: {
                 id: data.id,
-                name: data.product.name,
-                description: data.product.description,
-                protein: +data.product.protein,
-                fat: +data.product.fat,
-                carbs: +data.product.carbohydrates,
-                calories: +data.product.calories
+                name: data.product ? data.product.name : "",
+                description: data.product ? data.product.description : "",
+                protein: data.product ? +data.product.protein : 0,
+                fat: data.product ? +data.product.fat : 0,
+                carbs: data.product ? +data.product.carbohydrates : 0,
+                calories: data.product ? +data.product.calories : 0
             },
             weight: +data.weight,
             date: new Date(data.timestamp + "Z")
         };
     }
 
-    protected mapToData(model: Consumed): ConsumedData {
+    protected mapToData(model: IConsumed): ConsumedData {
         return {
             id: model.id,
             productId: model.productId,

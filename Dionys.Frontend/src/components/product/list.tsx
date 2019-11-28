@@ -9,7 +9,7 @@ interface Props {
 }
 
 class List extends React.Component<Props, {}> {
-    public constructor(props) {
+    constructor(props: Props) {
         super(props);
 
         this.state = {};

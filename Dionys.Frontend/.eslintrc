@@ -1,0 +1,46 @@
+{
+    "extends": ["prettier", "prettier/react", "plugin:@typescript-eslint/recommended", "plugin:react/recommended"],
+    "plugins": ["prettier"],
+    "rules": {
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [".js", ".jsx"]
+            }
+        ]
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "globals": {
+        "window": true,
+        "document": true,
+        "localStorage": true,
+        "FormData": true,
+        "FileReader": true,
+        "Blob": true,
+        "navigator": true,
+        "Headers": true,
+        "Request": true,
+        "fetch": true
+    },
+    "parser": "babel-eslint",
+    "settings": {
+        "react": {
+            "version": "detect"
+        },
+        "import/resolver": {
+            "node": {
+                "paths": ["src"]
+            }
+        }
+    },
+    "env": {
+        "browser": true,
+        "node": true
+    }
+}

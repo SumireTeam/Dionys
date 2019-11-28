@@ -3,23 +3,23 @@ import { Breadcrumbs, CircularProgress, Button } from "@material-ui/core";
 import { History } from "history";
 import { Layout, Link, ConsumedEdit, LinkAdapter, DeleteDialog } from "../../components";
 import { ServiceProvider } from "../../services";
-import { Consumed } from "../../models";
+import { IConsumed } from "../../models";
 
-interface Props {
+interface IEditProps {
     readonly id: string;
     readonly history: History;
 }
 
-interface State {
+interface IEditState {
     readonly loading: boolean;
-    readonly consumed: Consumed;
+    readonly consumed: IConsumed;
     readonly deleteDialogOpen: boolean;
 }
 
-class Edit extends React.Component<Props, State> {
+class Edit extends React.Component<IEditProps, IEditState> {
     protected readonly service = ServiceProvider.consumedService;
 
-    public constructor(props) {
+    public constructor(props: IEditProps) {
         super(props);
 
         this.state = {
@@ -40,7 +40,7 @@ class Edit extends React.Component<Props, State> {
         this.setState({ loading: false, consumed });
     }
 
-    protected onModelChange(consumed: Consumed) {
+    protected onModelChange(consumed: IConsumed) {
         this.setState({ consumed });
     }
 

@@ -1,9 +1,9 @@
 import React from "react";
 import { Table, TableBody, TableRow, TableCell } from "@material-ui/core";
-import { Consumed, formatDateTime } from "../../models";
+import { IConsumed, formatDateTime } from "../../models";
 
 interface Props {
-    consumed: Consumed;
+    consumed: IConsumed;
 }
 
 const Show = ({ consumed }: Props) => {
@@ -18,7 +18,7 @@ const Show = ({ consumed }: Props) => {
                     <TableCell component="th" scope="row">
                         Product
                     </TableCell>
-                    <TableCell>{consumed.product.name}</TableCell>
+                    <TableCell>{consumed.product ? consumed.product.name : ""}</TableCell>
                 </TableRow>
 
                 <TableRow>

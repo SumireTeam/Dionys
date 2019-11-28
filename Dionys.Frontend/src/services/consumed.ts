@@ -1,4 +1,4 @@
 import { CrudService } from "./service";
-import { Consumed } from "../models";
+import { IConsumed } from "../models";
 
-export type ConsumedService = CrudService<Consumed>;
+export type ConsumedService = CrudService<IConsumed>;

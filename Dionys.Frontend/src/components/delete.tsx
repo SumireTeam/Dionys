@@ -10,7 +10,7 @@ interface Props {
 }
 
 class DeleteDialog extends React.Component<Props, {}> {
-    public constructor(props) {
+    public constructor(props: Props) {
         super(props);
 
         this.state = {};

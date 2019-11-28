@@ -3,55 +3,55 @@ import { Breadcrumbs } from "@material-ui/core";
 import { History } from "history";
 import { Layout, Link, ConsumedEdit } from "../../components";
 import { ServiceProvider } from "../../services";
-import { Consumed } from "../../models";
+import { IConsumed } from "../../models";
 
-interface Props {
+interface ICreateProps {
     readonly history: History;
 }
 
-interface State {
-    readonly consumed: Consumed;
+interface ICreateState {
+    readonly data: IConsumedCreateData;
 }
 
-class Create extends React.Component<Props, State> {
+interface IConsumedCreateData {
+    productId: string;
+    weight: number;
+}
+
+class Create extends React.Component<ICreateProps, ICreateState> {
     protected readonly service = ServiceProvider.consumedService;
 
-    public constructor(props) {
+    public constructor(props: ICreateProps) {
         super(props);
 
-        this.state = {
-            consumed: null
-        };
+        this.state = { data: { productId: "", weight: 0 } };
 
         this.onModelChange = this.onModelChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
 
     public async componentDidMount() {
-        const consumed: Consumed = {
-            id: null,
+        const consumed: IConsumedCreateData = {
             productId: "",
-            weight: 0,
-            date: new Date()
+            weight: 0
         };
 
-        this.setState({ consumed });
+        this.setState({ data: consumed });
     }
 
-    protected onModelChange(consumed: Consumed) {
-        this.setState({ consumed });
+    protected onModelChange(consumed: IConsumed) {
+        this.setState({ data: consumed });
     }
 
     protected async onSubmit() {
-        const data = { ...this.state.consumed };
-        delete data.id;
+        const data = { ...this.state.data } as IConsumed;
 
         const consumed = await this.service.create(data);
         this.props.history.push(`/consumed/${consumed.id}`);
     }
 
     public render() {
-        const consumed = this.state.consumed;
+        const consumed = this.state.data;
 
         return (
             <Layout title="Add consumed product">

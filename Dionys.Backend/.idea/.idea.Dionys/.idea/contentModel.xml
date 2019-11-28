@@ -65,13 +65,6 @@
             <e p="IJwtSigningEncodingKey.cs" t="Include" />
           </e>
         </e>
-        <e p="ClientApp" t="Include">
-          <e p="src" t="Include">
-            <e p="models" t="Include">
-              <e p="paging.ts" t="Include" />
-            </e>
-          </e>
-        </e>
         <e p="Controllers" t="Include">
           <e p="AuthenticationController.cs" t="Include" />
           <e p="ConsumedProductsController.cs" t="Include" />

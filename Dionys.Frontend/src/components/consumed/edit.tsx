@@ -1,13 +1,13 @@
 import React from "react";
 import { TextField, Button } from "@material-ui/core";
-import { Consumed } from "../../models";
+import { IConsumed } from "../../models";
 import { ServiceProvider } from "../../services";
 import Select from "../select";
 import { getDate, setDate, getTime, setTime } from "../../models";
 
 interface Props {
-    consumed: Consumed;
-    onModelChange: (consumed: Consumed) => void;
+    consumed: IConsumed;
+    onModelChange: (consumed: IConsumed) => void;
     onSubmit: () => void;
 }
 
@@ -34,7 +34,7 @@ const search = async (name: string, callback: (options: Option[]) => void) => {
 const numRegExp = new RegExp(/^\d+(\.\d+)?$/);
 
 class Edit extends React.Component<Props, State> {
-    public constructor(props) {
+    public constructor(props: Props) {
         super(props);
     }
 

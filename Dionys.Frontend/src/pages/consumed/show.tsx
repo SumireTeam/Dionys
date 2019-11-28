@@ -3,7 +3,7 @@ import { Breadcrumbs, CircularProgress, Button } from "@material-ui/core";
 import { History } from "history";
 import { Layout, Link, ConsumedShow, LinkAdapter, DeleteDialog } from "../../components";
 import { ServiceProvider } from "../../services";
-import { Consumed } from "../../models";
+import { IConsumed } from "../../models";
 
 interface Props {
     readonly id: string;
@@ -12,7 +12,7 @@ interface Props {
 
 interface State {
     readonly loading: boolean;
-    readonly consumed: Consumed;
+    readonly consumed: IConsumed;
     readonly deleteDialogOpen: boolean;
 }
 

@@ -2,12 +2,12 @@ import React from "react";
 import { Breadcrumbs, CircularProgress, Button } from "@material-ui/core";
 import { Layout, Link, ConsumedList, LinkAdapter, DeleteDialog } from "../../components";
 import { ServiceProvider } from "../../services";
-import { Consumed } from "../../models";
+import { IConsumed } from "../../models";
 
 interface State {
     readonly loading: boolean;
-    readonly consumed: Consumed[];
-    readonly deleteDialogItem: null | Consumed;
+    readonly consumed: IConsumed[];
+    readonly deleteDialogItem: null | IConsumed;
     readonly deleteDialogOpen: boolean;
 }
 
@@ -38,7 +38,7 @@ class List extends React.Component<{}, State> {
         });
     }
 
-    protected openDeleteDialog(item: Consumed) {
+    protected openDeleteDialog(item: IConsumed) {
         this.setState({
             deleteDialogItem: item,
             deleteDialogOpen: true

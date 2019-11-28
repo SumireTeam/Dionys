@@ -1,15 +1,15 @@
 import React from "react";
 import { Table, TableHead, TableBody, TableRow, TableCell, Button } from "@material-ui/core";
-import { Consumed, formatDateTime } from "../../models";
+import { IConsumed, formatDateTime } from "../../models";
 import LinkAdapter from "../link-adapter";
 
 interface Props {
-    consumed: Consumed[];
-    openDeleteDialog: (item: Consumed) => void;
+    consumed: IConsumed[];
+    openDeleteDialog: (item: IConsumed) => void;
 }
 
 class List extends React.Component<Props, {}> {
-    public constructor(props) {
+    constructor(props: Props) {
         super(props);
 
         this.state = {};
@@ -31,7 +31,7 @@ class List extends React.Component<Props, {}> {
                     {this.props.consumed.map(consumed => (
                         <TableRow key={consumed.id}>
                             <TableCell component="th" scope="row">
-                                {consumed.product.name}
+                                {consumed.product ? consumed.product.name : ""}
                             </TableCell>
                             <TableCell align="right">{consumed.weight}</TableCell>
                             <TableCell>{formatDateTime(consumed.date)}</TableCell>

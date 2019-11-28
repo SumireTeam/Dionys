@@ -1,16 +1,21 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Container, Paper, Typography } from "@material-ui/core";
 import PropsTypes from "prop-types";
 
-const Layout = ({ title, children }) => {
+interface ILayoutProps {
+    title: string;
+    children: ReactNode;
+}
+
+const Layout = (props: ILayoutProps) => {
     return (
         <Container maxWidth="lg">
             <Paper className="container">
                 <Typography className="container-title" component="h1" variant="h3">
-                    {title}
+                    {props.title}
                 </Typography>
 
-                {children}
+                {props.children}
             </Paper>
         </Container>
     );

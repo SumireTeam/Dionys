@@ -73,7 +73,7 @@ namespace Dionys.Web
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dionys API indev");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dionys API v1");
             });
 
             app.UseStaticFiles();
@@ -81,14 +81,6 @@ namespace Dionys.Web
 
             app.UseRouting();
             app.UseEndpoints(endpoints => endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}"));
-
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-            });
         }
     }
 }

@@ -15,7 +15,7 @@ interface State {
 const numRegExp = new RegExp(/^\d+(\.\d+)?$/);
 
 class Edit extends React.Component<Props, State> {
-    public constructor(props) {
+    public constructor(props: Props) {
         super(props);
 
         this.state = {
