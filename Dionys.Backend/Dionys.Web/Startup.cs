@@ -27,6 +27,7 @@ namespace Dionys.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddMvcCore().SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddApiExplorer();
 
@@ -72,6 +73,7 @@ namespace Dionys.Web
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseEndpoints(endpoints => endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}"));
         }
     }
