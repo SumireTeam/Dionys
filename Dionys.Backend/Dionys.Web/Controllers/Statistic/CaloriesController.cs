@@ -66,14 +66,14 @@ namespace Dionys.Web.Controllers.Statistic
         /// </summary>
         /// <param name="datetime">DateTime</param>
         /// <returns>year, week Tuple</returns>
-        private static Tuple<int, int> GetWeekYear(DateTime datetime)
+        private static Tuple<int, int> GetWeekYear(DateTimeOffset datetime)
         {
             // TODO: culture info
             var cultureInfo = new CultureInfo("ru-RU");
             var calendar = cultureInfo.Calendar;
 
             var year = datetime.Year;
-            var week = calendar.GetWeekOfYear(datetime, CalendarWeekRule.FirstDay, DayOfWeek.Sunday);
+            var week = calendar.GetWeekOfYear(datetime.DateTime, CalendarWeekRule.FirstDay, DayOfWeek.Sunday);
 
             return new Tuple<int, int>(year, week);
         }

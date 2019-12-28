@@ -24,6 +24,6 @@ namespace Dionys.Web.Models.Api
         /// <summary>
         /// When product was consumed
         /// </summary>
-        public DateTime Timestamp { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
     }
 }

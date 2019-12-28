@@ -29,7 +29,25 @@ namespace Dionys.Web.Controllers
         [HttpGet]
         public PagingViewModel<ConsumedProductResponse> GetConsumedProducts([FromQuery] PagingParameterModel paging)
         {
-            var consumedProducts = _consumedProductService.GetAll()
+            // TODO: Write mappings.
+
+            var consumedProducts = _consumedProductService.GetAll().Select(x => new ConsumedProductResponse
+            {
+                Id = x.Id,
+                ProductId = x.ProductId,
+                Timestamp = x.Timestamp,
+                Weight = x.Weight,
+                Product = new ProductViewModel
+                {
+                    Id = x.ProductId,
+                    Calories = x.Product.Calories,
+                    Carbohydrates = x.Product.Carbohydrates,
+                    Description = x.Product.Description,
+                    Fat = x.Product.Fat,
+                    Name = x.Product.Name,
+                    Protein = x.Product.Protein
+                }
+            })
                 .Select(x => _mapper.Map<ConsumedProductResponse>(x))
                 .Skip(paging.Page * paging.ElementsPerPage).Take(paging.ElementsPerPage).ToImmutableArray();
 
