@@ -1,14 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text;
 using AutoMapper;
 using Dionys.Infrastructure.Models;
 using Dionys.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
 namespace Dionys.Web
@@ -22,9 +25,6 @@ namespace Dionys.Web
 
         public IConfiguration Configuration { get; }
 
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "ASP0000:Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'", Justification = "<Pending>")]
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvcCore().SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
@@ -40,15 +40,12 @@ namespace Dionys.Web
 
             services.AddDbContext<DionysContext>(options =>
                 options.UseNpgsql(
-                    Configuration.GetConnectionString("DefaultConnection"),
+                    Configuration.GetConnectionString("DionysConnectionString"),
                     b => b.MigrationsAssembly("Dionys.Infrastructure")
                 )
             );
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dionys API", Version = "indev" });
-            });
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dionys API", Version = "V1" }); });
 
             services.AddTransient<MappingScenario>();
             services.AddTransient<IDionysContext, DionysContext>();
@@ -57,10 +54,8 @@ namespace Dionys.Web
 
             var sp = services.BuildServiceProvider();
 
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(sp.GetService<MappingScenario>());
-            });
+            var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(sp.GetService<MappingScenario>()); });
+            sp.GetService<DionysContext>().Database.EnsureCreated();
 
             var mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
@@ -71,10 +66,7 @@ namespace Dionys.Web
         {
             //app.UseAuthentication();
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dionys API v1");
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dionys API v1"); });
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();

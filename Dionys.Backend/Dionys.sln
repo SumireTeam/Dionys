@@ -10,6 +10,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dionys.Infrastructure", "Dionys.Infrastructure\Dionys.Infrastructure.csproj", "{12C91809-4699-4DD4-B508-80F0BAAAD8CE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{957E7FDE-EAAC-4A5B-A436-03147D89510D}"
+	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
+		Dionys.sln.DotSettings = Dionys.sln.DotSettings
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

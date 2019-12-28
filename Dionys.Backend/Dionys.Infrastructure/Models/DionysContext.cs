@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Dionys.Infrastructure.Seeds;
 using Microsoft.EntityFrameworkCore;
@@ -10,15 +14,10 @@ namespace Dionys.Infrastructure.Models
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Seed();
-        }
+        public DbSet<User> Users { get; set; }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<ConsumedProduct> ConsumedProducts { get; set; }
-        public DbSet<User> Users { get; set; }
 
         public Task<int> SaveChangesAsync()
         {
@@ -33,6 +32,13 @@ namespace Dionys.Infrastructure.Models
         public void MarkAsUnchanged(IDbModel item)
         {
             Entry(item).State = EntityState.Unchanged;
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Seed();
         }
     }
 }
